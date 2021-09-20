@@ -1,64 +1,136 @@
-let data = null;
-
 const escapeString = (string) => {
-    const tagsToReplace = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;'
-    };
+  const tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+  };
 
-    return string.replace(/[&<>]/g, function(tag) {
-        return tagsToReplace[tag] || tag;
-    });
+  return string.replace(/[&<>]/g, function(tag) {
+    return tagsToReplace[tag] || tag;
+  });
 }
 
-const createMainNewsItem = (item) => {
-    return `
-    <article class="main-article">
-        <div class="main-article__image-container">
-            <img class="article-img main-article__img" src="${encodeURI(item.image)}" alt="Фото новости">
+const categoryIds = {
+  index: 0,
+  sport: 2,
+  technologies: 1,
+  karpov: 6,
+  fashion: 3,
+}
+
+const categoryNames = {
+  index: 'Главная',
+  sport: 'Спорт',
+  technologies: 'Технологии',
+  karpov: 'Karpov',
+  fashion: 'Мода',
+}
+
+const Navigation = ({ pages = [], currentPage, className = '', onNavClick = () => {}, placement, ...restProps }) => {
+  return (
+    <nav {...restProps} className={`grid navigation navigation--${placement} ${className}`}>
+      <a className="navigation__logo" onClick={onNavClick} data-href="index" href="/index.html">
+        <img className="navigation__logo-image" src="./images/logo.svg" alt="Логотип"/>
+      </a>
+      <ul className="navigation__list">
+        {pages.map((page) => {
+          return (
+            <li className="navigation__item" key={page}>
+              <a className={`navigation__link ${page === currentPage ? 'navigation__link--active' : ''}`} onClick={onNavClick} data-href={page} href="#">{categoryNames[page]}</a>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}
+
+const App = () => {
+  const [page, setPage] = React.useState('index');
+  const [data, setData] = React.useState({ items: [], categories: [], sources: [] });
+
+  React.useEffect(() => {
+    fetch(`http://frontend.karpovcourses.net/api/v2/ru/news/${categoryIds[page]}`)
+      .then(response => response.json())
+      .then(({ items, categories, sources }) => {
+        setData({ items, categories, sources })
+      })
+  }, [page]);
+
+  const onNavClick = (e) => {
+    e.preventDefault();
+    setPage(e.currentTarget.dataset.href);
+  }
+
+  return (
+    <React.Fragment>
+      <header className="header">
+        <div className="container">
+          <Navigation
+            placement="header"
+            pages={['index', 'fashion', 'technologies', 'sport', 'karpov']}
+            onNavClick={onNavClick}
+            currentPage={page}
+          />
         </div>
-        <div class="main-article__content">
-            <span class="article-category">${escapeString(data.categories.find(({ id }) => item.category_id === id).name)}</span>
-            <h2 class="main-article__title">${escapeString(item.title)}</h2>
-            <p class="main-article__text">${escapeString(item.description)}</p>
-            <span class="article-source main-article__caption">${escapeString(data.sources.find(({ id }) => item.source_id === id).name)}</span>
+      </header>
+
+      <main>
+        <section className="articles">
+          <div className="container grid">
+            <section className="articles__big-column">
+              {data.items.slice(0, 3).map((item) => {
+                return (
+                  <article className="main-article" key={item.title}>
+                    <div className="main-article__image-container">
+                      <img className="article-img main-article__img" src={item.image} alt="Фото новости"/>
+                    </div>
+                    <div className="main-article__content">
+                      <span className="article-category">{escapeString(data.categories.find(({id}) => item.category_id === id).name)}</span>
+                      <h2 className="main-article__title">{escapeString(item.title)}</h2>
+                      <p className="main-article__text">{escapeString(item.description)}</p>
+                      <span
+                        className="article-source main-article__caption">{escapeString(data.sources.find(({id}) => item.source_id === id).name)}</span>
+                    </div>
+                  </article>
+                )
+              })}
+            </section>
+            <section className="articles__small-column">
+              {data.items.slice(3, 12).map((item) => {
+                return (
+                  <article className="small-article" key={item.title}>
+                    <h2 className="small-article__title">{escapeString(item.title)}</h2>
+                    <span
+                      className="article-date">{escapeString(data.sources.find(({id}) => item.source_id === id).name)}</span>
+                    <span className="article-source">{escapeString(new Date(item.date).toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' }))}</span>
+                  </article>
+                )
+              })}
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer">
+        <div className="container">
+          <Navigation
+            placement="footer"
+            className="footer__navigation"
+            pages={['index', 'fashion', 'technologies', 'sport', 'karpov']}
+            onNavClick={onNavClick}
+            currentPage={page}
+          />
+          <div className="footer__bottom">
+            <p className="footer__text">
+              Сделано на Frontend курсе в <a className="footer__link" href="https://karpov.courses/frontend" target="_blank">Karpov.Courses</a>
+            </p>
+            <p className="footer__text footer__text--gray">© 2021</p>
+          </div>
         </div>
-    </article>
-    `;
+      </footer>
+    </React.Fragment>
+  );
 }
 
-const createSmallNewsItem = (item) => {
-    return `
-    <article class="small-article">
-        <h2 class="small-article__title">${escapeString(item.title)}</h2>
-        <span class="article-date">${escapeString(data.sources.find(({ id }) => item.source_id === id).name)}</span>
-        <span class="article-source">${escapeString(new Date(item.date).toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' }))}</span>
-    </article>
-    `;
-}
-
-const renderNews = (categoryId) => {
-    fetch('http://frontend.karpovcourses.net/api/v2/ru/news/' + (categoryId ? categoryId : ''))
-        .then(response => response.json())
-        .then((responseJson) => {
-            data = responseJson;
-            const mainNews = data.items.slice(0, 3);
-            const mainNewsContainer = document.querySelector('.articles__big-column');
-
-            mainNews.forEach((item) => {
-                const template = document.createElement('template');
-                template.innerHTML = createMainNewsItem(item);
-                mainNewsContainer.appendChild(template.content);
-            })
-
-            const smallNews = data.items.slice(3, 12);
-            const smallNewsContainer = document.querySelector('.articles__small-column');
-
-            smallNews.forEach((item) => {
-                const template = document.createElement('template');
-                template.innerHTML = createSmallNewsItem(item);
-                smallNewsContainer.appendChild(template.content);
-            })
-        })
-}
+ReactDOM.render(<App />, document.getElementById('root'));

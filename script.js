@@ -1,15 +1,3 @@
-const escapeString = (string) => {
-  const tagsToReplace = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;'
-  };
-
-  return string.replace(/[&<>]/g, function(tag) {
-    return tagsToReplace[tag] || tag;
-  });
-}
-
 const categoryIds = {
   index: 0,
   sport: 2,
@@ -86,11 +74,11 @@ const App = () => {
                       <img className="article-img main-article__img" src={item.image} alt="Фото новости"/>
                     </div>
                     <div className="main-article__content">
-                      <span className="article-category">{escapeString(data.categories.find(({id}) => item.category_id === id).name)}</span>
-                      <h2 className="main-article__title">{escapeString(item.title)}</h2>
-                      <p className="main-article__text">{escapeString(item.description)}</p>
+                      <span className="article-category">{data.categories.find(({id}) => item.category_id === id).name}</span>
+                      <h2 className="main-article__title">{item.title}</h2>
+                      <p className="main-article__text">{item.description}</p>
                       <span
-                        className="article-source main-article__caption">{escapeString(data.sources.find(({id}) => item.source_id === id).name)}</span>
+                        className="article-source main-article__caption">{data.sources.find(({id}) => item.source_id === id).name}</span>
                     </div>
                   </article>
                 )
@@ -100,10 +88,10 @@ const App = () => {
               {data.items.slice(3, 12).map((item) => {
                 return (
                   <article className="small-article" key={item.title}>
-                    <h2 className="small-article__title">{escapeString(item.title)}</h2>
+                    <h2 className="small-article__title">{item.title}</h2>
                     <span
-                      className="article-date">{escapeString(data.sources.find(({id}) => item.source_id === id).name)}</span>
-                    <span className="article-source">{escapeString(new Date(item.date).toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' }))}</span>
+                      className="article-date">{data.sources.find(({id}) => item.source_id === id).name}</span>
+                    <span className="article-source">{new Date(item.date).toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' })}</span>
                   </article>
                 )
               })}

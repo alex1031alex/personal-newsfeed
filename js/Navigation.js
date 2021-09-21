@@ -1,3 +1,4 @@
+import React from 'react';
 import { categoryNames } from './utils.js';
 
 export const Navigation = ({ categories = [], currentCategory, className = '', onNavClick = () => {}, placement, ...restProps }) => {

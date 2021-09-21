@@ -1,3 +1,4 @@
+import React from 'react';
 import { MainArticle } from './MainArticle.js';
 import { SmallArticle } from './SmallArticle.js';
 

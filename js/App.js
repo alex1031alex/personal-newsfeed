@@ -1,3 +1,4 @@
+import React from 'react';
 import { Navigation } from './Navigation.js';
 import { Articles } from './Articles.js';
 import { categoryIds } from './utils.js';

@@ -2,12 +2,19 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: './dist/index.js',
-  optimization: {
-    minimize: false
-  },
+  entry: './js/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
-  }
+  },
+  optimization: {
+    minimize: false
+  },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: 'babel-loader'
+    }]
+  },
 }

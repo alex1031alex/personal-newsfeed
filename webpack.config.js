@@ -2,15 +2,11 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
+  mode: process.env.NODE_ENV || 'production',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './',
     filename: 'bundle.[hash].js'
-  },
-  optimization: {
-    minimize: false
   },
   module: {
     rules: [{
@@ -29,8 +25,6 @@ module.exports = {
     template: './src/index.html'
   })],
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist')
-    }
+    open: true,
   }
 }

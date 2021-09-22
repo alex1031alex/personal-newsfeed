@@ -4,7 +4,9 @@
   "description": "Учебный проект новостной ленты",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "NODE_ENV=development webpack serve",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",

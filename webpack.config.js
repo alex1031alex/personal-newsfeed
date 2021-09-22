@@ -5,6 +5,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: './dist/',
     filename: 'bundle.js'
   },
   optimization: {
@@ -18,6 +19,9 @@ module.exports = {
     }, {
       test: /\.css$/,
       use: ['style-loader', 'css-loader']
+    }, {
+      test: /\.(jpg|svg|png)$/,
+      type: 'asset/resource'
     }]
   },
 }

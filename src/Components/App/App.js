@@ -9,7 +9,7 @@ export const App = () => {
   const [data, setData] = React.useState({ items: [], categories: [], sources: [] });
 
   React.useEffect(() => {
-    fetch(`http://frontend.karpovcourses.net/api/v2/ru/news/${categoryIds[category]}`)
+    fetch(`https://frontend.karpovcourses.net/api/v2/ru/news/${categoryIds[category]}`)
       .then(response => response.json())
       .then(({ items, categories, sources }) => {
         setData({ items, categories, sources })

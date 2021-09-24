@@ -39,7 +39,7 @@ const createSmallNewsItem = (item) => {
 }
 
 const renderNews = (categoryId) => {
-    fetch('http://frontend.karpovcourses.net/api/v2/ru/news/' + (categoryId ? categoryId : ''))
+    fetch('https://frontend.karpovcourses.net/api/v2/ru/news/' + (categoryId ? categoryId : ''))
         .then(response => response.json())
         .then((responseJson) => {
             data = responseJson;

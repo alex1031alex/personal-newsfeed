@@ -1,9 +1,25 @@
-pages:
-  stage: deploy
+image: node:14.17.4
+
+stages:
+  - build
+  - deploy
+
+Build:
+  stage: build
+  before_script:
+    - npm install
   script:
-    - mkdir .public
-    - cp -r * .public
-    - mv .public public
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+
+Pages:
+  stage: deploy
+  tags:
+    - pages
+  script:
+    - cp -r dist public
   artifacts:
     paths:
       - public

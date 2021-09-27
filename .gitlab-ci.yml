@@ -1,24 +1,11 @@
 image: node:14.17.4
 
-stages:
-  - build
-  - deploy
-
-Build:
-  stage: build
+pages:
+  stage: deploy
   before_script:
     - npm install
   script:
     - npm run build
-  artifacts:
-    paths:
-      - dist
-
-Pages:
-  stage: deploy
-  tags:
-    - pages
-  script:
     - cp -r dist public
   artifacts:
     paths:

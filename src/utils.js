@@ -8,8 +8,8 @@ export const categoryIds = {
 
 export const categoryNames = {
   index: 'Главная',
-  sport: 'Спорт',
-  technologies: 'Технологии',
-  karpov: 'Karpov',
   fashion: 'Мода',
+  technologies: 'Технологии',
+  sport: 'Спорт',
+  karpov: 'Karpov'
 }

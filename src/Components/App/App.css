@@ -1,20 +1,13 @@
-/**
- * Header
- */
-
 .header {
   padding-top: 38px;
   padding-bottom: 150px;
 }
 
-/**
- * Footer
- */
-
 .footer {
   padding-top: 22px;
   padding-bottom: 56px;
   background-color: var(--color-primary);
+  min-width: var(--container-width);
 }
 
 .footer__bottom {

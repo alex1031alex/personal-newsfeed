@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "eslint": "eslint src/{**/*,*}.{tsx,ts}",
+    "eslint": "eslint --ext .js,.ts,.tsx ./",
     "stylelint": "stylelint src/{**/*,*}.css",
     "start": "NODE_ENV=development webpack serve",
     "build": "webpack"

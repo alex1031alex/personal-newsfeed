@@ -1,7 +1,3 @@
 node_modules/
 dist/
-
-.idea/workspace.xml
-.idea/usage.statistics.xml
-.idea/modules.xml
-.idea/*.iml
+.idea/

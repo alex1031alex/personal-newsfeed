@@ -76,7 +76,7 @@ export const App: FC = () => {
           <div className="footer__bottom">
             <p className="footer__text">
               Сделано на Frontend курсе в{' '}
-              <a className="footer__link" href="https://karpov.courses/frontend" target="_blank">
+              <a className="footer__link" href="https://karpov.courses/frontend" target="_blank" rel="noreferrer">
                 Karpov.Courses
               </a>
             </p>

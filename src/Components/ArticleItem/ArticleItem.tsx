@@ -6,79 +6,6 @@ import { SingleLineTitleArticle } from '../SingleLineTitleArticle/SingleLineTitl
 import { Article, ArticleItemAPI, Category, RelatedArticlesAPI, Source } from '../../types';
 import { beautifyDate } from '../../utils';
 
-const sourcesMock: Source[] = [
-  {
-    id: 1,
-    name: 'meduza',
-  },
-  {
-    id: 6,
-    name: '3dnews',
-  },
-  {
-    id: 7,
-    name: 'nytimes',
-  },
-  {
-    id: 8,
-    name: 'forbes',
-  },
-  {
-    id: 9,
-    name: 'igromania',
-  },
-  {
-    id: 10,
-    name: 'buro237',
-  },
-  {
-    id: 11,
-    name: 'rusvesna',
-  },
-  {
-    id: 12,
-    name: '7ya',
-  },
-  {
-    id: 14,
-    name: 'aif',
-  },
-  {
-    id: 15,
-    name: 'gazetaru',
-  },
-  {
-    id: 16,
-    name: 'karpov.courses',
-  },
-];
-const categoriesMock: Category[] = [
-  {
-    id: 1,
-    name: 'tech',
-  },
-  {
-    id: 2,
-    name: 'sport',
-  },
-  {
-    id: 3,
-    name: 'fashion',
-  },
-  {
-    id: 4,
-    name: 'politics',
-  },
-  {
-    id: 5,
-    name: 'other',
-  },
-  {
-    id: 6,
-    name: 'karpov.courses',
-  },
-];
-
 export const ArticleItem: FC = () => {
   const { id }: { id?: string } = useParams();
   const [articleItem, setArticleItem] = React.useState<ArticleItemAPI | null>(null);
@@ -91,15 +18,17 @@ export const ArticleItem: FC = () => {
       .then((response) => response.json())
       .then(setArticleItem);
 
-    // https://frontend.karpovcourses.net/api/v2/categories
-    // https://frontend.karpovcourses.net/api/v2/sources
     Promise.all([
       fetch(`https://frontend.karpovcourses.net/api/v2/news/related/${id}?count=9`).then((response) => response.json()),
+      fetch('https://frontend.karpovcourses.net/api/v2/sources').then((response) => response.json()),
+      fetch('https://frontend.karpovcourses.net/api/v2/categories').then((response) => response.json()),
     ]).then((responses) => {
       const articles: RelatedArticlesAPI = responses[0];
+      const sources: Source[] = responses[1];
+      const categories: Category[] = responses[2];
       setRelatedArticles(articles.items);
-      setSources(sourcesMock);
-      setCategories(categoriesMock);
+      setSources(sources);
+      setCategories(categories);
     });
   }, [id]);
 

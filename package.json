@@ -1,8 +1,9 @@
 {
   "scripts": {
     "eslint": "eslint --ext .js,.ts,.tsx ./",
-    "stylelint": "stylelint src/{**/*,*}.css",
-    "prettier": "prettier --check ./",
+    "stylelint": "stylelint \"src/{**/*,*}.css\"",
+    "prettier": "prettier --write ./",
+    "prettier-check": "prettier --check ./",
     "start": "NODE_ENV=development webpack serve",
     "build": "webpack"
   },
@@ -41,6 +42,6 @@
   "pre-commit": [
     "stylelint",
     "eslint",
-    "prettier"
+    "prettier-check"
   ]
 }

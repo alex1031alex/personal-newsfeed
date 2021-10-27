@@ -15,6 +15,7 @@ export interface ArticleItemAPI {
   text: string;
   category: Category;
   source: Source;
+  author?: string;
 }
 
 export interface RelatedArticlesAPI {
@@ -24,6 +25,7 @@ export interface RelatedArticlesAPI {
 export interface Source {
   id: number;
   name: string;
+  site?: string;
 }
 
 export interface Category {

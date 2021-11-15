@@ -9,11 +9,11 @@ import { useHistory } from 'react-router-dom';
 
 type TLoginFormFieldState = Omit<TLoginField, 'onChange'>;
 
-type Action = { type: 'onChange' | 'error'; value: string };
+type Action = { type: 'change' | 'error'; value: string };
 
 function reducer(state: TLoginFormFieldState, action: Action): TLoginFormFieldState {
   switch (action.type) {
-    case 'onChange':
+    case 'change':
       return {
         ...state,
         error: false,
@@ -85,11 +85,11 @@ export const LoginContainer: FC = () => {
       <LoginForm
         email={{
           ...emailState,
-          onChange: (e) => dispatchEmail({ type: 'onChange', value: e.target.value }),
+          onChange: (e) => dispatchEmail({ type: 'change', value: e.target.value }),
         }}
         password={{
           ...passwordState,
-          onChange: (e) => dispatchPassword({ type: 'onChange', value: e.target.value }),
+          onChange: (e) => dispatchPassword({ type: 'change', value: e.target.value }),
         }}
         onSubmit={onSubmit}
       />

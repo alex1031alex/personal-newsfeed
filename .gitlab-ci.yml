@@ -44,6 +44,6 @@ deploy:
     name: production
   resource_group: production
   script:
-    - rsync -a --delete dist/ admin@65.108.85.62:/home/admin/newsfeed
+    - rsync -a --delete dist/ $VPS_PATH
   only:
     - master

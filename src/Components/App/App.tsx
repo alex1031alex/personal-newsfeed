@@ -7,6 +7,8 @@ import { Page } from '../Page/Page';
 import { AdminPage } from '../AdminPage/AdminPage';
 import { AdminArticles } from '../AdminArticles/AdminArticles';
 import { AdminArticleItem } from '../AdminArticleItem/AdminArticleItem';
+import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
+import { LoginContainer } from '../../features/auth/login/LoginContainer';
 
 export const App: FC = () => {
   const { pathname } = useLocation();
@@ -17,21 +19,26 @@ export const App: FC = () => {
 
   return (
     <Switch>
-      <Route path="/admin" exact>
+      <Route path="/login">
+        <Page>
+          <LoginContainer />
+        </Page>
+      </Route>
+      <PrivateRoute path="/admin" exact>
         <AdminPage>
           <AdminArticles />
         </AdminPage>
-      </Route>
-      <Route path="/admin/create">
+      </PrivateRoute>
+      <PrivateRoute path="/admin/create">
         <AdminPage>
           <AdminArticleItem />
         </AdminPage>
-      </Route>
-      <Route path="/admin/edit/:id">
+      </PrivateRoute>
+      <PrivateRoute path="/admin/edit/:id">
         <AdminPage>
           <AdminArticleItem />
         </AdminPage>
-      </Route>
+      </PrivateRoute>
       <Route path="/article/:id">
         <Page>
           <ArticleItem />

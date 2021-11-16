@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
-import { initFirebase } from '../firebase/init';
+import { firebaseApp } from '../firebase/init';
 import { getAuth, signInWithEmailAndPassword, browserSessionPersistence } from 'firebase/auth';
 import { TAuthContext } from './types';
 type TProps = {
@@ -7,9 +7,7 @@ type TProps = {
 };
 
 // TODO Дима должен это заинитеть где-то на уровне админки
-initFirebase();
-
-const auth = getAuth();
+const auth = getAuth(firebaseApp);
 auth.languageCode = 'ru';
 
 auth.setPersistence(browserSessionPersistence);

@@ -1,9 +1,6 @@
-type TLoginWithEmailAndPasswordResult =
-  | true
-  | {
-      code?: string;
-      message?: string;
-    };
+import { UserCredential } from 'firebase/auth';
+
+type TLoginWithEmailAndPasswordResult = UserCredential;
 
 export type TAuthContext = {
   // boolean - определенное состояние. null - неизвестное (загрузка)

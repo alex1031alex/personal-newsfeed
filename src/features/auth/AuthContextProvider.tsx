@@ -27,7 +27,7 @@ export const AuthContextProvider: FC<TProps> = (props) => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log('auth changed', user);
+      // console.log('auth changed', user);
       if (user) {
         setUser(user);
         setIsAuthenticated(true);
@@ -40,11 +40,13 @@ export const AuthContextProvider: FC<TProps> = (props) => {
 
   const loginWithEmailAndPassword = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        return true;
+      .then((result) => {
+        // log success auth
+        return result;
       })
       .catch((error) => {
-        return error;
+        // log auth errors
+        throw error;
       });
   };
 

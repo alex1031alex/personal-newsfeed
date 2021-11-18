@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 import './LoginContainer.css';
 import { validateEmail } from './utils';
 import { useAuthContext } from '../AuthContextProvider';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 type TLoginFormFieldState = Omit<TLoginField, 'onChange'>;
 
@@ -33,6 +33,7 @@ function reducer(state: TLoginFormFieldState, action: Action): TLoginFormFieldSt
 
 export const LoginContainer: FC = () => {
   const history = useHistory();
+  const { state: locationState } = useLocation<{ from: string }>();
   const { loginWithEmailAndPassword } = useAuthContext();
   const [authError, setAuthError] = useState('');
   const [emailState, dispatchEmail] = useReducer<Reducer<TLoginFormFieldState, Action>>(reducer, {
@@ -59,19 +60,19 @@ export const LoginContainer: FC = () => {
     if (passwordState.value.length <= 6) {
       dispatchPassword({
         type: 'error',
-        value: 'Длинна пароля меньше 6ти символов',
+        value: 'Длинна пароля меньше 6-ти символов',
       });
       valid = false;
     }
 
     if (valid) {
-      loginWithEmailAndPassword(emailState.value, passwordState.value).then((res) => {
-        if (res === true) {
-          history.push('/admin');
-        } else {
-          setAuthError(res?.message || 'error');
-        }
-      });
+      loginWithEmailAndPassword(emailState.value, passwordState.value)
+        .then(() => {
+          history.push(locationState?.from || '/admin');
+        })
+        .catch((error) => {
+          setAuthError(error?.message || 'error');
+        });
     }
   };
 

@@ -5,6 +5,7 @@ import './Articles.css';
 import { NewsAPI } from '../../types';
 import { useParams } from 'react-router-dom';
 import { categoryIds } from '../../utils';
+import { PartnerArticle } from '../PartnerArticle/PartnerArticle';
 
 export const Articles: FC = () => {
   const { categoryId = 'index' }: { categoryId?: string } = useParams();
@@ -57,6 +58,10 @@ export const Articles: FC = () => {
             );
           })}
         </section>
+      </div>
+
+      <div className="articles__partner-article">
+        <PartnerArticle />
       </div>
     </section>
   );

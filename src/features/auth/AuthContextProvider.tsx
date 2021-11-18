@@ -1,16 +1,11 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
-import { firebaseApp } from '../firebase/init';
 import { getAuth, signInWithEmailAndPassword, browserSessionPersistence } from 'firebase/auth';
 import { TAuthContext } from './types';
+import { FirebaseApp } from 'firebase/app';
 type TProps = {
   children: React.ReactNode;
+  firebaseApp: FirebaseApp;
 };
-
-// TODO Дима должен это заинитеть где-то на уровне админки
-const auth = getAuth(firebaseApp);
-auth.languageCode = 'ru';
-
-auth.setPersistence(browserSessionPersistence);
 
 export const authContext = createContext<TAuthContext>({
   isAuthenticated: null,
@@ -24,8 +19,15 @@ export const useAuthContext = (): TAuthContext => {
 export const AuthContextProvider: FC<TProps> = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState<TAuthContext['isAuthenticated']>(null);
   const [user, setUser] = useState<any>(null);
+  const [auth] = useState(getAuth(props.firebaseApp));
 
   useEffect(() => {
+    if (!auth) {
+      return;
+    }
+    auth.setPersistence(browserSessionPersistence);
+    auth.languageCode = 'ru';
+
     auth.onAuthStateChanged((user) => {
       // console.log('auth changed', user);
       if (user) {

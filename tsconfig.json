@@ -10,7 +10,7 @@
     ],
     "baseUrl": "src",
     "paths": {
-      "@components/*": ["components/*"],
+      "@components/*": ["Components/*"],
     }
   },
   "include": ["src"],

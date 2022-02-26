@@ -4,7 +4,7 @@ export const categoryIds = {
   technologies: 1,
   karpov: 6,
   fashion: 3,
-}
+};
 
 export const categoryNames = {
   index: 'Главная',
@@ -12,4 +12,11 @@ export const categoryNames = {
   technologies: 'Технологии',
   sport: 'Спорт',
   karpov: 'Karpov'
-}
+};
+
+export const beautifyDate = (date: string): string => {
+  return new Date(date).toLocaleDateString('ru-RU', {
+    month: 'long',
+    day: 'numeric'
+  });
+};

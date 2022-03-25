@@ -1,26 +1,23 @@
-import React, {FC} from 'react';
+import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 import './SmallArticle.css';
+import { beautifyDate } from '../../utils';
 
 interface Props {
-    title: string;
-    source: string;
-    date: string;
-    onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  id: number;
+  title: string;
+  source: string;
+  date: string;
 }
 
-export const SmallArticle: FC<Props> = ({ title, source, date, onClick }) => {
+export const SmallArticle: FC<Props> = ({ id, title, source, date }) => {
   return (
-    <article className="small-article" onClick={onClick}>
-      <h2 className="small-article__title">{title}</h2>
-      <span className="article-date">
-        {source}
-      </span>
-      <span className="article-source">
-        {new Date(date).toLocaleDateString('ru-RU', {
-          month: 'long',
-          day: 'numeric'
-        })}
-      </span>
-    </article>
-  )
-}
+    <Link to={`/article/${id}`} className="small-article">
+      <article className="small-article__container">
+        <h2 className="small-article__title">{title}</h2>
+        <span className="article-date">{source}</span>
+        <span className="article-source">{beautifyDate(date)}</span>
+      </article>
+    </Link>
+  );
+};

@@ -1,51 +1,63 @@
 import React, { FC } from 'react';
+import { useParams } from 'react-router-dom';
 import { MainArticle } from '../MainArticle/MainArticle';
 import { SmallArticle } from '../SmallArticle/SmallArticle';
 import './Articles.css';
-import { NewsAPI } from "../../../types";
+import { NewsAPI } from '../../types';
+import { categoryIds } from '../../utils';
 
-interface Props {
-    articles: NewsAPI;
-    onArticleClick: (id: number) => void;
-}
+export const Articles: FC = () => {
+  const { categoryId = 'index' }: { categoryId?: string } = useParams();
+  const [articles, setArticles] = React.useState<NewsAPI>({
+    items: [],
+    categories: [],
+    sources: [],
+  });
 
-export const Articles: FC<Props> = ({ articles, onArticleClick }) => {
+  React.useEffect(() => {
+    fetch('https://frontend.karpovcourses.net/api/v2/ru/news/' + categoryIds[categoryId] || '')
+      .then((response) => response.json())
+      .then((response: NewsAPI) => {
+        setArticles(response);
+      });
+  }, [categoryId]);
+
   return (
     <section className="articles">
       <div className="container grid">
         <section className="articles__big-column">
           {articles.items.slice(0, 3).map((item) => {
-              const category = articles.categories.find(({id}) => item.category_id === id);
-              const source = articles.sources.find(({id}) => item.source_id === id);
+            const category = articles.categories.find(({ id }) => item.category_id === id);
+            const source = articles.sources.find(({ id }) => item.source_id === id);
 
             return (
               <MainArticle
-                key={item.title}
+                key={item.id}
+                id={item.id}
                 title={item.title}
                 description={item.description}
                 image={item.image}
                 category={category ? category.name : ''}
                 source={source?.name || ''}
-                onClick={() => onArticleClick(item.id)}
               />
-            )
+            );
           })}
         </section>
         <section className="articles__small-column">
           {articles.items.slice(3, 12).map((item) => {
-              const source = articles.sources.find(({id}) => item.source_id === id);
+            const source = articles.sources.find(({ id }) => item.source_id === id);
             return (
               <SmallArticle
-                key={item.title}
+                key={item.id}
+                id={item.id}
                 title={item.title}
-                source={source?.name ||``}
+                source={source?.name || ''}
                 date={item.date}
-                onClick={() => onArticleClick(item.id)}
               />
-            )
+            );
           })}
         </section>
       </div>
     </section>
-  )
-}
+  );
+};

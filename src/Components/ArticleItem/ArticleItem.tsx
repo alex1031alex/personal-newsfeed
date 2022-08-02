@@ -86,7 +86,6 @@ export const ArticleItem: FC = () => {
                 <RelatedSmallArticle
                   id={item.id}
                   key={item.id}
-                  id={item.id}
                   title={item.title}
                   category={category?.name || ''}
                   source={source?.name || ''}
@@ -111,7 +110,6 @@ export const ArticleItem: FC = () => {
                 <SingleLineTitleArticle
                   id={item.id}
                   key={item.id}
-                  id={item.id}
                   image={item.image}
                   title={item.title}
                   text={item.description}

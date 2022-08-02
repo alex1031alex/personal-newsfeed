@@ -3,6 +3,7 @@ import { getAuth, User, browserLocalPersistence, signInWithEmailAndPassword, sig
 import { TAuthContext } from './types';
 import { FirebaseApp } from 'firebase/app';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
 type TProps = {
   children: React.ReactNode;
   firebaseApp: FirebaseApp;

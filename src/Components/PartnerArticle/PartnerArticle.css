@@ -33,6 +33,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 .partner-article__title {
   margin-top: 12px;
   font-weight: bold;
@@ -43,6 +44,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 .partner-article__text {
   margin-top: 44px;
   font-weight: normal;
@@ -55,4 +57,3 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-

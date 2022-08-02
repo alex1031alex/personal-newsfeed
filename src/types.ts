@@ -25,6 +25,7 @@ export interface RelatedArticlesAPI {
 export interface Source {
   id: number;
   name: string;
+  site?: string;
 }
 
 export interface Category {

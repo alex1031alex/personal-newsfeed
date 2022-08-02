@@ -9,6 +9,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.[contenthash].js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -50,6 +51,10 @@ module.exports = {
     }),
   ],
   devServer: {
+    client: {
+      overlay: false,
+    },
+    hot: true,
     open: true,
     historyApiFallback: true,
   },

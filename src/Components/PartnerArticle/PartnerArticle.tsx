@@ -1,6 +1,6 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './PartnerArticle.css';
-import { getMainPartnerArticle } from '../../api';
+import { getMainPartnerArticle } from '../../../api';
 import { IPartnerArticle } from '../../types';
 
 export const PartnerArticle: FC = () => {
@@ -8,9 +8,8 @@ export const PartnerArticle: FC = () => {
 
   useEffect(() => {
     (async () => {
-      const article = await getMainPartnerArticle();
-
-      setArticle(article);
+      const mainPartnerArticle = await getMainPartnerArticle();
+      setArticle(mainPartnerArticle);
     })();
   }, []);
 
@@ -25,7 +24,7 @@ export const PartnerArticle: FC = () => {
           <img className="partner-article__image" src={article.image} alt={article.title} />
         </div>
         <div className="partner-article__content">
-          <span className="partner-article__caption">Партнерский материал от {article['company-name']}</span>
+          <span className="partner-article__caption">Партнёрский материал от {article['company-name']}</span>
           <h2 className="partner-article__title">{article.title}</h2>
           <p className="partner-article__text">{article.description}</p>
         </div>

@@ -1,34 +1,17 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  browserLocalPersistence,
-  signOut,
-  UserCredential,
-  signInWithPopup,
-  ProviderId,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-} from 'firebase/auth';
+import { getAuth, User, browserLocalPersistence, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { TAuthContext } from './types';
 import { FirebaseApp } from 'firebase/app';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import { firebaseApp } from '../../api';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 type TProps = {
   children: React.ReactNode;
   firebaseApp: FirebaseApp;
 };
 
-export const ALLOWED_OAUTH_PROVIDERS: Record<string, any> = {
-  [ProviderId.GOOGLE]: new GoogleAuthProvider(),
-  [ProviderId.GITHUB]: new GithubAuthProvider(),
-};
-
 export const authContext = createContext<TAuthContext>({
-  isAuthenticated: null,
+  isAuthenticate: null,
   loginWithEmailAndPassword: () => Promise.reject({}),
-  loginWithOauthPopup: () => Promise.reject({}),
   logOut: () => void 0,
 });
 
@@ -41,75 +24,67 @@ const isUserAdmin = async (firebaseApp: FirebaseApp) => {
   return await getDoc(doc(db, '/internal/auth'));
 };
 
-export const AuthContextProvider: FC<TProps> = (props) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<TAuthContext['isAuthenticated']>(null);
-  const [user, setUser] = useState<any>(null);
-  const [auth] = useState(getAuth(props.firebaseApp));
+export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
+  const [isAuthenticate, setIsAuthenticate] = useState<TAuthContext['isAuthenticate']>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [auth] = useState(getAuth(firebaseApp));
 
   useEffect(() => {
     if (!auth) {
       return;
     }
+
     auth.setPersistence(browserLocalPersistence);
-    auth.languageCode = 'ru';
+    auth.languageCode = 'en';
 
     auth.onAuthStateChanged((user) => {
-      // console.log('auth changed', user);
       if (user) {
+        //Проверяем, является ли пользователь админом
+        //Проверка проводится на доступ к документу auth
+        //Если никаких ошибок нет, то пользователь - админ
         isUserAdmin(firebaseApp)
           .then(() => {
+            setIsAuthenticate(true);
             setUser(user);
-            setIsAuthenticated(true);
           })
-          .catch((e) => {
-            // eslint-disable-next-line no-console
-            console.error(e);
+          .catch(() => {
+            //Пользователь не админ, разлогиним его
+            logOut();
+            //Сбрасываем аутентификацию
+            setIsAuthenticate(false);
             setUser(null);
-            setIsAuthenticated(false);
-            signOut(auth);
           });
       } else {
+        setIsAuthenticate(false);
         setUser(null);
-        setIsAuthenticated(false);
       }
     });
   }, [auth]);
 
-  const processLogin = (loginPromise: Promise<UserCredential>) => {
+  const loginWithEmailAndPassword = (email: string, password: string) => {
+    //Сбрасываем аутентификацию
+    setIsAuthenticate(null);
     setUser(null);
-    setIsAuthenticated(null);
-    return loginPromise
+
+    return signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
-        // log success auth
+        //  todo log data
         return result;
       })
       .catch((error) => {
-        // log auth errors
+        //  handle error
+        console.error('login error', error);
         throw error;
       });
   };
 
-  const loginWithEmailAndPassword = (email: string, password: string) => {
-    return processLogin(signInWithEmailAndPassword(auth, email, password));
+  const logOut = () => {
+    signOut(auth);
   };
-
-  const loginWithOauthPopup = (providerId: string) => {
-    return processLogin(signInWithPopup(auth, ALLOWED_OAUTH_PROVIDERS[providerId]));
-  };
-
-  const logOut = () => signOut(auth);
 
   return (
-    <authContext.Provider
-      value={{
-        isAuthenticated,
-        user,
-        loginWithEmailAndPassword,
-        loginWithOauthPopup,
-        logOut,
-      }}
-    >
-      {props.children}
+    <authContext.Provider value={{ isAuthenticate, user, loginWithEmailAndPassword, logOut }}>
+      {children}
     </authContext.Provider>
   );
 };

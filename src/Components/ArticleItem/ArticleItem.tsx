@@ -5,14 +5,14 @@ import { RelatedSmallArticle } from '../RelatedSmallArticle/RelatedSmallArticle'
 import { SingleLineTitleArticle } from '../SingleLineTitleArticle/SingleLineTitleArticle';
 import { Article, ArticleItemAPI, Category, RelatedArticlesAPI, Source } from '../../types';
 import { beautifyDate } from '../../utils';
-import { ArticleItemInfo } from './ArticleItemInfo/ArticleItemInfo';
+import { ArticleItemInfo } from '../ArticleItemInfo/ArticleItemInfo';
 
 export const ArticleItem: FC = () => {
-  const { id }: { id?: string } = useParams();
+  const { id }: { id: string } = useParams();
   const [articleItem, setArticleItem] = React.useState<ArticleItemAPI | null>(null);
   const [relatedArticles, setRelatedArticles] = React.useState<Article[] | null>(null);
-  const [sources, setSources] = React.useState<Source[]>([]);
   const [categories, setCategories] = React.useState<Category[]>([]);
+  const [sources, setSources] = React.useState<Source[]>([]);
 
   React.useEffect(() => {
     fetch(`https://frontend.karpovcourses.net/api/v2/news/full/${id}`)
@@ -21,15 +21,16 @@ export const ArticleItem: FC = () => {
 
     Promise.all([
       fetch(`https://frontend.karpovcourses.net/api/v2/news/related/${id}?count=9`).then((response) => response.json()),
-      fetch('https://frontend.karpovcourses.net/api/v2/sources').then((response) => response.json()),
       fetch('https://frontend.karpovcourses.net/api/v2/categories').then((response) => response.json()),
+      fetch('https://frontend.karpovcourses.net/api/v2/sources').then((response) => response.json()),
     ]).then((responses) => {
       const articles: RelatedArticlesAPI = responses[0];
-      const sources: Source[] = responses[1];
-      const categories: Category[] = responses[2];
+      const categories: Category[] = responses[1];
+      const sources: Source[] = responses[2];
+
       setRelatedArticles(articles.items);
-      setSources(sources);
       setCategories(categories);
+      setSources(sources);
     });
   }, [id]);
 
@@ -58,7 +59,6 @@ export const ArticleItem: FC = () => {
               <div className="grid">
                 <h1 className="article__hero-title">{articleItem.title}</h1>
               </div>
-
               {renderArticleItemInfo(articleItem)}
             </div>
           </section>
@@ -84,6 +84,7 @@ export const ArticleItem: FC = () => {
 
               return (
                 <RelatedSmallArticle
+                  id={item.id}
                   key={item.id}
                   id={item.id}
                   title={item.title}
@@ -108,6 +109,7 @@ export const ArticleItem: FC = () => {
 
               return (
                 <SingleLineTitleArticle
+                  id={item.id}
                   key={item.id}
                   id={item.id}
                   image={item.image}

@@ -2,16 +2,19 @@
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
-    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "target": "ES2017",
     "lib": [
       "dom",
-      "es2017",
-      "dom.iterable"
+      "dom.iterable",
+      "es2017"
     ],
     "baseUrl": "src",
     "paths": {
-      "@components/*": ["Components/*"],
-    }
+      "@components/*": ["components/*"],
+    },
+    "jsx": "react-jsx"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

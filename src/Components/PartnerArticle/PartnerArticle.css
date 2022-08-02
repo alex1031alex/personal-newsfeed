@@ -8,10 +8,10 @@
 }
 
 .partner-article__content {
-  grid-column: 7 / -1;
-  justify-content: center;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  grid-column: 7/-1;
   color: var(--color-white);
 }
 
@@ -50,6 +50,8 @@
   font-weight: normal;
   font-size: 22px;
   line-height: 26px;
+
+  /* Ниже свойства определяющие максимальное количество строк в тексте */
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;

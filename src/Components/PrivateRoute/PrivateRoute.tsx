@@ -1,39 +1,28 @@
-import { Redirect, Route, RouteProps } from 'react-router-dom';
 import React, { FC } from 'react';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useAuthContext } from '../../features/auth/AuthContextProvider';
 import { Box, CircularProgress } from '@mui/material';
 
-type TProps = {
-  children: React.ReactNode;
+type Tprops = {
+  children?: React.ReactNode;
 } & RouteProps;
 
-export const PrivateRoute: FC<TProps> = ({ children, ...rest }) => {
-  const { isAuthenticated } = useAuthContext();
-
-  if (isAuthenticated === null) {
-    // если статус авторизации пока неизвестен
+export const PrivateRoute: FC<Tprops> = ({ children, ...rest }) => {
+  const { isAuthenticate } = useAuthContext();
+  if (isAuthenticate === null) {
     return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <CircularProgress color="primary" />
+      <Box sx={{ textAlign: 'center' }}>
+        <CircularProgress />
       </Box>
     );
   }
+
   return (
     <Route
       {...rest}
-      render={(props) =>
-        // eslint-disable-next-line
-        isAuthenticated ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
+      render={(props) => {
+        return isAuthenticate ? children : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />;
+      }}
     />
   );
 };

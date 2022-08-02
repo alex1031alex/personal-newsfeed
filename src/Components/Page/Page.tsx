@@ -1,10 +1,10 @@
-import React, { FC, Fragment } from 'react';
+import React, { FC } from 'react';
 import './Page.css';
 import { Navigation } from '../Navigation/Navigation';
 
 export const Page: FC = ({ children }) => {
   return (
-    <Fragment>
+    <React.Fragment>
       <header className="header">
         <div className="container">
           <Navigation placement="header" className="header__navigation" />
@@ -13,7 +13,7 @@ export const Page: FC = ({ children }) => {
 
       <main>{children}</main>
 
-      <footer className="footer">
+      <footer className="footer" id="footer">
         <div className="container">
           <Navigation placement="footer" className="footer__navigation" />
           <div className="footer__bottom">
@@ -27,6 +27,6 @@ export const Page: FC = ({ children }) => {
           </div>
         </div>
       </footer>
-    </Fragment>
+    </React.Fragment>
   );
 };

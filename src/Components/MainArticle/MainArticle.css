@@ -1,5 +1,6 @@
 .main-article {
   margin-bottom: 95px;
+  display: block;
   cursor: pointer;
   display: block;
 }

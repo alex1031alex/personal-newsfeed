@@ -1,23 +1,24 @@
-import React, { FC, useEffect, useState } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { CardActionArea } from '@mui/material';
 import Button from '@mui/material/Button';
-import { IPartnerArticle } from '../../types';
-import { getPartnersArticles } from '../../api';
+
+import { FC, useEffect, useState } from 'react';
+import { PartnerArticle } from '../../../types';
+import { getPartnersArticles } from '../../../api';
 
 export const AdminArticles: FC = () => {
-  const [articles, setArticles] = useState<IPartnerArticle[]>([]);
-
+  const [articles, setArticles] = useState<PartnerArticle[]>([]);
   useEffect(() => {
     (async () => {
       const articles = await getPartnersArticles();
-
+      console.log(articles);
       setArticles(articles);
     })();
   }, []);
@@ -40,23 +41,25 @@ export const AdminArticles: FC = () => {
       </Grid>
 
       <Grid container spacing={2}>
-        {articles.map((item) => (
-          <Grid item xs={3} key={item.id}>
-            <Card>
-              <CardActionArea component={Link} to={`/admin/edit/${item.id}`}>
-                <CardMedia component="img" height="140" image={item.image} alt={item.title} />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {item.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
+        {articles.map((item) => {
+          return (
+            <Grid item xs={3} key={item.id}>
+              <Card>
+                <CardActionArea component={Link} to={`/admin/edit/${item.id}`}>
+                  <CardMedia component="img" height="140" image={item.image} alt={item.title} />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.description}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
     </>
   );

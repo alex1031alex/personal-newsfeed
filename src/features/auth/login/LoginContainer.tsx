@@ -1,106 +1,73 @@
 import { LoginForm, TLoginField } from '@components/LoginForm/LoginForm';
 import React, { FC, Reducer, useReducer, useState } from 'react';
-import { Divider, Link, Typography } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LoginIcon from '@mui/icons-material/Login';
-
 import './LoginContainer.css';
 import { validateEmail } from './utils';
-import { ALLOWED_OAUTH_PROVIDERS, useAuthContext } from '../AuthContextProvider';
+import { useAuthContext } from '../AuthContextProvider';
+import Typography from '@mui/material/Typography';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ProviderId } from 'firebase/auth';
-import { TLoginWithEmailAndPasswordResult } from '../types';
 
-type TLoginFormFieldState = Omit<TLoginField, 'onChange'>;
+type TLoginFieldState = Omit<TLoginField, 'onChange'>;
+type TAction = {
+  type: 'change' | 'error';
+  value: string;
+};
 
-type Action = { type: 'change' | 'error'; value: string };
-
-function reducer(state: TLoginFormFieldState, action: Action): TLoginFormFieldState {
+const reducer = (state: TLoginFieldState, action: TAction): TLoginFieldState => {
   switch (action.type) {
-    case 'change':
+    case 'change': {
       return {
         ...state,
-        error: false,
-        helper: '',
         value: action.value,
+        error: false,
       };
-    case 'error':
+    }
+
+    case 'error': {
       return {
         ...state,
         error: true,
         helper: action.value,
       };
-    default:
-      throw new Error();
+    }
   }
-}
-
-const getOAuthProviderIcon = (provider: string) => {
-  switch (provider) {
-    case ProviderId.GOOGLE:
-      return <GoogleIcon fontSize="inherit" />;
-    case ProviderId.GITHUB:
-      return <GitHubIcon fontSize="inherit" />;
-    default:
-      return <LoginIcon fontSize="inherit" />;
-  }
+  return state;
 };
 
 export const LoginContainer: FC = () => {
+  const [authError, setAuthError] = useState();
+  const { loginWithEmailAndPassword } = useAuthContext();
   const history = useHistory();
   const { state: locationState } = useLocation<{ from: string }>();
-  const { loginWithEmailAndPassword, loginWithOauthPopup } = useAuthContext();
-  const [authError, setAuthError] = useState('');
-  const [emailState, dispatchEmail] = useReducer<Reducer<TLoginFormFieldState, Action>>(reducer, {
+  const [emailState, dispatchEmail] = useReducer<Reducer<TLoginFieldState, TAction>>(reducer, {
     name: 'email',
     value: '',
   });
 
-  const [passwordState, dispatchPassword] = useReducer<Reducer<TLoginFormFieldState, Action>>(reducer, {
+  const [passwordState, dispatchPassword] = useReducer<Reducer<TLoginFieldState, TAction>>(reducer, {
     name: 'password',
     value: '',
   });
 
-  const processLogin = (loginPromise: Promise<TLoginWithEmailAndPasswordResult>) => {
-    return loginPromise
-      .then(() => {
-        history.push(locationState?.from || '/admin');
-      })
-      .catch((error) => {
-        setAuthError(error?.message || 'error');
-      });
-  };
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let valid = true;
+    let isValid = true;
+
     if (!validateEmail(emailState.value)) {
-      dispatchEmail({
-        type: 'error',
-        value: 'Введите корректный email',
-      });
-      valid = false;
+      isValid = false;
+      dispatchEmail({ type: 'error', value: 'Введите корректный email' });
     }
-
+    //  Здесь должна быть валидация пароля
     if (passwordState.value.length <= 6) {
-      dispatchPassword({
-        type: 'error',
-        value: 'Длинна пароля меньше 6-ти символов',
-      });
-      valid = false;
+      isValid = false;
+      dispatchPassword({ type: 'error', value: 'Длина пароля должна быть больше 6 символов' });
     }
 
-    if (valid) {
-      processLogin(loginWithEmailAndPassword(emailState.value, passwordState.value));
-    }
-  };
-
-  const onOauthLogin = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    const dataset = (e.target as HTMLElement)?.closest<HTMLLinkElement>('.oauth-login-container__item')?.dataset;
-    if (dataset?.provider) {
-      processLogin(loginWithOauthPopup(dataset?.provider));
+    if (isValid) {
+      loginWithEmailAndPassword(emailState.value, passwordState.value)
+        .then(() => {
+          history.push(locationState?.from || '/admin');
+        })
+        .catch((error) => setAuthError(error.message || 'error'));
     }
   };
 
@@ -122,22 +89,6 @@ export const LoginContainer: FC = () => {
         }}
         onSubmit={onSubmit}
       />
-      <Divider />
-      <div className="oauth-login-container">
-        {Object.keys(ALLOWED_OAUTH_PROVIDERS).map((item) => {
-          return (
-            <Link
-              key={item}
-              href="#"
-              className="oauth-login-container__item"
-              data-provider={item}
-              onClick={onOauthLogin}
-            >
-              {getOAuthProviderIcon(item)}
-            </Link>
-          );
-        })}
-      </div>
     </div>
   );
 };

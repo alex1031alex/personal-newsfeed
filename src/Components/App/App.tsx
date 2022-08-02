@@ -1,12 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-
 import { Articles } from '../Articles/Articles';
 import { ArticleItem } from '../ArticleItem/ArticleItem';
+import { AdminPage } from '../Adminpage/AdminPage';
 import { Page } from '../Page/Page';
-import { AdminPage } from '../AdminPage/AdminPage';
 import { AdminArticles } from '../AdminArticles/AdminArticles';
-import { AdminArticleItem } from '../AdminArticleItem/AdminArticleItem';
+import { AdminArticlesItem } from '../AdminArticlesItem/AdminArticlesItem';
 import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
 import { LoginContainer } from '../../features/auth/login/LoginContainer';
 
@@ -19,24 +18,24 @@ export const App: FC = () => {
 
   return (
     <Switch>
-      <Route path="/login">
+      <Route path="/login" exact>
         <Page>
           <LoginContainer />
         </Page>
       </Route>
+      <PrivateRoute exact path="/admin/create">
+        <AdminPage>
+          <AdminArticlesItem />
+        </AdminPage>
+      </PrivateRoute>
       <PrivateRoute path="/admin" exact>
         <AdminPage>
           <AdminArticles />
         </AdminPage>
       </PrivateRoute>
-      <PrivateRoute path="/admin/create">
-        <AdminPage>
-          <AdminArticleItem />
-        </AdminPage>
-      </PrivateRoute>
       <PrivateRoute path="/admin/edit/:id">
         <AdminPage>
-          <AdminArticleItem />
+          <AdminArticlesItem />
         </AdminPage>
       </PrivateRoute>
       <Route path="/article/:id">

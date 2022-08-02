@@ -4,28 +4,9 @@ export interface NewsAPI {
   items: Article[];
 }
 
-export interface ArticleItemAPI {
-  id: number;
-  lang: string;
-  date: string;
-  title: string;
-  description: string;
-  image: string;
-  link: string;
-  text: string;
-  category: Category;
-  source: Source;
-  author?: string;
-}
-
-export interface RelatedArticlesAPI {
-  items: Article[];
-}
-
 export interface Source {
   id: number;
   name: string;
-  site?: string;
 }
 
 export interface Category {
@@ -44,15 +25,28 @@ export interface Article {
   category_id: number;
 }
 
-export interface IPartnerArticle {
+export interface ArticleItemAPI {
+  id: number;
+  lang: string;
+  date: string;
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  text: string;
+  category: Category;
+  source: Source;
+}
+
+export interface RelatedArticlesAPI {
+  items: Article[];
+}
+
+export interface PartnerArticle {
   id: string;
   'company-name': string;
   title: string;
-  image: string;
   description: string;
   text: string;
-  created?: {
-    nanoseconds: number;
-    seconds: number;
-  };
+  image: string;
 }

@@ -42,3 +42,16 @@ export interface Article {
   source_id: number;
   category_id: number;
 }
+
+export interface IPartnerArticle {
+  id: string;
+  'company-name': string;
+  title: string;
+  image: string;
+  description: string;
+  text: string;
+  created?: {
+    nanoseconds: number;
+    seconds: number;
+  };
+}

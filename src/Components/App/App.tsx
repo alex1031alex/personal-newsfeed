@@ -1,9 +1,13 @@
 import React, { FC, useEffect } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import './App.css';
-import { Navigation } from '../Navigation/Navigation';
 import { Articles } from '../Articles/Articles';
 import { ArticleItem } from '../ArticleItem/ArticleItem';
+import { AdminPage } from '../Adminpage/AdminPage';
+import { Page } from '../Page/Page';
+import { AdminArticles } from '../AdminArticles/AdminArticles';
+import { AdminArticlesItem } from '../AdminArticlesItem/AdminArticlesItem';
+import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
+import { LoginContainer } from '../../features/auth/login/LoginContainer';
 
 export const App: FC = () => {
   const { pathname } = useLocation();
@@ -13,41 +17,42 @@ export const App: FC = () => {
   }, [pathname]);
 
   return (
-    <React.Fragment>
-      <header className="header">
-        <div className="container">
-          <Navigation placement="header" className="header__navigation" />
-        </div>
-      </header>
-
-      <main>
-        <Switch>
-          <Route path="/article/:id">
-            <ArticleItem />
-          </Route>
-          <Route path="/:categoryId">
-            <Articles />
-          </Route>
-          <Route path="/">
-            <Articles />
-          </Route>
-        </Switch>
-      </main>
-
-      <footer className="footer">
-        <div className="container">
-          <Navigation placement="footer" className="footer__navigation" />
-          <div className="footer__bottom">
-            <p className="footer__text">
-              Сделано на Frontend курсе в{' '}
-              <a className="footer__link" href="https://karpov.courses/frontend" target="_blank" rel="noreferrer">
-                Karpov.Courses
-              </a>
-            </p>
-            <p className="footer__text footer__text--gray">© 2021</p>
-          </div>
-        </div>
-      </footer>
-    </React.Fragment>
+    <Switch>
+      <Route path="/login" exact>
+        <Page>
+          <LoginContainer />
+        </Page>
+      </Route>
+      <PrivateRoute exact path="/admin/create">
+        <AdminPage>
+          <AdminArticlesItem />
+        </AdminPage>
+      </PrivateRoute>
+      <PrivateRoute path="/admin" exact>
+        <AdminPage>
+          <AdminArticles />
+        </AdminPage>
+      </PrivateRoute>
+      <PrivateRoute path="/admin/edit/:id">
+        <AdminPage>
+          <AdminArticlesItem />
+        </AdminPage>
+      </PrivateRoute>
+      <Route path="/article/:id">
+        <Page>
+          <ArticleItem />
+        </Page>
+      </Route>
+      <Route path="/:categoryId">
+        <Page>
+          <Articles />
+        </Page>
+      </Route>
+      <Route path="/">
+        <Page>
+          <Articles />
+        </Page>
+      </Route>
+    </Switch>
   );
 };

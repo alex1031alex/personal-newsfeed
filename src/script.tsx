@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './common.css';
-import { App } from './Components/App/App';
+import { App } from '@components/App/App';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { initializeAPI } from '../api';
+import { AuthContextProvider } from './features/auth/AuthContextProvider';
+
+const firebaseApp = initializeAPI();
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  <AuthContextProvider firebaseApp={firebaseApp}>
+    <Router>
+      <App />
+    </Router>
+  </AuthContextProvider>,
   document.getElementById('root')
 );

@@ -41,3 +41,12 @@ export interface ArticleItemAPI {
 export interface RelatedArticlesAPI {
   items: Article[];
 }
+
+export interface PartnerArticle {
+  id: string;
+  'company-name': string;
+  title: string;
+  description: string;
+  text: string;
+  image: string;
+}

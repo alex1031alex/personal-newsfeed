@@ -18,7 +18,6 @@ export const AdminArticles: FC = () => {
   useEffect(() => {
     (async () => {
       const articles = await getPartnersArticles();
-      console.log(articles);
       setArticles(articles);
     })();
   }, []);

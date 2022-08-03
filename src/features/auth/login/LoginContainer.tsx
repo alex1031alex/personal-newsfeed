@@ -1,15 +1,35 @@
-import { LoginForm, TLoginField } from '@components/LoginForm/LoginForm';
 import React, { FC, Reducer, useReducer, useState } from 'react';
-import './LoginContainer.css';
-import { validateEmail } from './utils';
-import { useAuthContext } from '../AuthContextProvider';
-import Typography from '@mui/material/Typography';
 import { useHistory, useLocation } from 'react-router-dom';
+import './LoginContainer.css';
+
+import { LoginForm, TLoginField } from '@components/LoginForm/LoginForm';
+import { ALLOWED_OAUTH_PROVIDERS, useAuthContext } from '../AuthContextProvider';
+import { validateEmail } from './utils';
+import { TLoginWithEmailAndPasswordResult } from '../types';
+
+import Typography from '@mui/material/Typography';
+import { Link } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
+import GitHubIcon from '@mui/icons-material/Github';
+import LoginIcon from '@mui/icons-material/Login';
+import { ProviderId } from 'firebase/auth';
 
 type TLoginFieldState = Omit<TLoginField, 'onChange'>;
+
 type TAction = {
   type: 'change' | 'error';
   value: string;
+};
+
+const getOAuthProviderIcon = (provider: string) => {
+  switch (provider) {
+    case ProviderId.GOOGLE:
+      return <GoogleIcon fontSize="inherit" />;
+    case ProviderId.GITHUB:
+      return <GitHubIcon fontSize="inherit" />;
+    default:
+      return <LoginIcon fontSize="inherit" />;
+  }
 };
 
 const reducer = (state: TLoginFieldState, action: TAction): TLoginFieldState => {
@@ -21,7 +41,6 @@ const reducer = (state: TLoginFieldState, action: TAction): TLoginFieldState => 
         error: false,
       };
     }
-
     case 'error': {
       return {
         ...state,
@@ -29,15 +48,17 @@ const reducer = (state: TLoginFieldState, action: TAction): TLoginFieldState => 
         helper: action.value,
       };
     }
+    default:
+      throw new Error();
   }
-  return state;
 };
 
 export const LoginContainer: FC = () => {
-  const [authError, setAuthError] = useState();
-  const { loginWithEmailAndPassword } = useAuthContext();
   const history = useHistory();
   const { state: locationState } = useLocation<{ from: string }>();
+  const { loginWithEmailAndPassword, loginWithOauthPopup } = useAuthContext();
+
+  const [authError, setAuthError] = useState('');
   const [emailState, dispatchEmail] = useReducer<Reducer<TLoginFieldState, TAction>>(reducer, {
     name: 'email',
     value: '',
@@ -48,26 +69,38 @@ export const LoginContainer: FC = () => {
     value: '',
   });
 
+  const processLogin = (loginPromise: Promise<TLoginWithEmailAndPasswordResult>) => {
+    return loginPromise
+      .then(() => {
+        history.push(locationState?.from || '/admin');
+      })
+      .catch((error) => setAuthError(error.message || 'error'));
+  };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let isValid = true;
 
     if (!validateEmail(emailState.value)) {
-      isValid = false;
       dispatchEmail({ type: 'error', value: 'Введите корректный email' });
-    }
-    //  Здесь должна быть валидация пароля
-    if (passwordState.value.length <= 6) {
       isValid = false;
+    }
+
+    if (passwordState.value.length <= 6) {
       dispatchPassword({ type: 'error', value: 'Длина пароля должна быть больше 6 символов' });
+      isValid = false;
     }
 
     if (isValid) {
-      loginWithEmailAndPassword(emailState.value, passwordState.value)
-        .then(() => {
-          history.push(locationState?.from || '/admin');
-        })
-        .catch((error) => setAuthError(error.message || 'error'));
+      processLogin(loginWithEmailAndPassword(emailState.value, passwordState.value));
+    }
+  };
+
+  const onOauthLogin = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    const dataset = (evt.target as HTMLElement)?.closest<HTMLLinkElement>('.login-oauth-container__item')?.dataset;
+    if (dataset?.provider) {
+      processLogin(loginWithOauthPopup(dataset?.provider));
     }
   };
 
@@ -89,6 +122,15 @@ export const LoginContainer: FC = () => {
         }}
         onSubmit={onSubmit}
       />
+      <div className="login-oauth-container">
+        {Object.keys(ALLOWED_OAUTH_PROVIDERS).map((key) => {
+          return (
+            <Link href="#" key={key} className="login-oauth-container__item" data-provider={key} onClick={onOauthLogin}>
+              {getOAuthProviderIcon(key)}
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 };

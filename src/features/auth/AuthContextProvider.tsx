@@ -1,8 +1,23 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
-import { getAuth, User, browserLocalPersistence, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  getAuth,
+  User,
+  browserLocalPersistence,
+  signInWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
+  ProviderId,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+} from 'firebase/auth';
 import { TAuthContext } from './types';
 import { FirebaseApp } from 'firebase/app';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
+export const ALLOWED_OAUTH_PROVIDERS: Record<string, any> = {
+  [ProviderId.GOOGLE]: new GoogleAuthProvider(),
+  [ProviderId.GITHUB]: new GithubAuthProvider(),
+};
 
 type TProps = {
   children: React.ReactNode;
@@ -13,6 +28,7 @@ export const authContext = createContext<TAuthContext>({
   isAuthenticate: null,
   loginWithEmailAndPassword: () => Promise.reject({}),
   logOut: () => void 0,
+  loginWithOauthPopup: () => Promise.reject({}),
 });
 
 export const useAuthContext = (): TAuthContext => {
@@ -73,7 +89,22 @@ export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
       })
       .catch((error) => {
         //  handle error
-        console.error('login error', error);
+        throw error;
+      });
+  };
+
+  const loginWithPopup = (provider: string) => {
+    //Сбрасываем аутентификацию
+    setIsAuthenticate(null);
+    setUser(null);
+
+    return signInWithPopup(auth, ALLOWED_OAUTH_PROVIDERS[provider])
+      .then((result) => {
+        //  todo log data
+        return result;
+      })
+      .catch((error) => {
+        //  handle error
         throw error;
       });
   };
@@ -83,7 +114,9 @@ export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
   };
 
   return (
-    <authContext.Provider value={{ isAuthenticate, user, loginWithEmailAndPassword, logOut }}>
+    <authContext.Provider
+      value={{ isAuthenticate, user, loginWithEmailAndPassword, logOut, loginWithOauthPopup: loginWithPopup }}
+    >
       {children}
     </authContext.Provider>
   );

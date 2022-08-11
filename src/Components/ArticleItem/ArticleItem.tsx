@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import './ArticleItem.css';
-import { RelatedSmallArticle } from '../RelatedSmallArticle/RelatedSmallArticle';
 import { SingleLineTitleArticle } from '../SingleLineTitleArticle/SingleLineTitleArticle';
 import { Article, ArticleItemAPI, Category, RelatedArticlesAPI, Source } from '../../types';
 import { beautifyDate } from '../../utils';
@@ -82,16 +81,7 @@ export const ArticleItem: FC = () => {
               const category = categories.find(({ id }) => item.category_id === id);
               const source = sources.find(({ id }) => item.source_id === id);
 
-              return (
-                <RelatedSmallArticle
-                  id={item.id}
-                  key={item.id}
-                  title={item.title}
-                  category={category?.name || ''}
-                  source={source?.name || ''}
-                  image={item.image}
-                />
-              );
+              return null;
             })}
           </div>
         </div>

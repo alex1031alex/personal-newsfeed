@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { MainArticle } from '../MainArticle/MainArticle';
-import { SmallArticle } from '../SmallArticle/SmallArticle';
 import './Articles.css';
 import { NewsAPI } from '../../types';
 import { categoryIds } from '../../utils';
@@ -47,15 +46,7 @@ export const Articles: FC = () => {
         <section className="articles__small-column">
           {articles.items.slice(3, 12).map((item) => {
             const source = articles.sources.find(({ id }) => item.source_id === id);
-            return (
-              <SmallArticle
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                source={source?.name || ''}
-                date={item.date}
-              />
-            );
+            return null;
           })}
         </section>
       </div>

@@ -18,12 +18,12 @@ import { ChangeEvent, FC, FormEvent, useRef, useState, useEffect } from 'react';
 import { InputName, InputRefs, InputValues, InputErrors } from './types';
 import { getErrors, getImage } from './helpers';
 import {
-  createPartnersArticle,
-  getPartnersArticle,
-  updatePartnersArticle,
-  deletePartnersArticle,
+  createPartnerArticle,
+  getPartnerArticle,
+  updatePartnerArticle,
+  deletePartnerArticle,
   uploadFile,
-} from '../../../api';
+} from '../../api';
 
 export const AdminArticlesItem: FC = () => {
   const { id }: { id?: string } = useParams();
@@ -104,7 +104,7 @@ export const AdminArticlesItem: FC = () => {
     }
 
     if (id) {
-      updatePartnersArticle(id, inputValues)
+      updatePartnerArticle(id, inputValues)
         .then(() => {
           setSnackbarMessage('✔ Статья обновлена!');
         })
@@ -112,7 +112,7 @@ export const AdminArticlesItem: FC = () => {
           setSnackbarMessage(`❌ ${error.message}`);
         });
     } else {
-      createPartnersArticle(inputValues)
+      createPartnerArticle(inputValues)
         .then(() => {
           setSnackbarMessage('✔ Статья создана!');
         })
@@ -168,7 +168,7 @@ export const AdminArticlesItem: FC = () => {
       return;
     }
 
-    deletePartnersArticle(id)
+    deletePartnerArticle(id)
       .then(() => {
         setSnackbarMessage('✔ Статья удалена!');
       })
@@ -183,7 +183,7 @@ export const AdminArticlesItem: FC = () => {
     }
 
     (async () => {
-      const data = await getPartnersArticle(id);
+      const data = await getPartnerArticle(id);
 
       setInputValues({
         'company-name': data['company-name'],

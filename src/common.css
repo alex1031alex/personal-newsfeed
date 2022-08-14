@@ -41,35 +41,6 @@ body {
   gap: var(--grid-gap);
 }
 
-.article-date,
-.article-source {
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  text-transform: uppercase;
-}
-
-.article-source {
-  color: var(--color-grey2);
-}
-
-.article-date {
-  color: var(--color-accent);
-}
-
-.article-date + .article-source::before {
-  content: " · ";
-}
-
-.article-category {
-  display: block;
-  font-size: 14px;
-  line-height: 17px;
-  color: var(--color-accent);
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
 .article-img {
   background: #ccc;
   display: block;

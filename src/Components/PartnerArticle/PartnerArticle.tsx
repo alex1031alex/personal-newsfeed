@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import './PartnerArticle.css';
-import { getMainPartnerArticle } from '../../../api';
+import { getMainPartnerArticle } from '../../api';
 import { IPartnerArticle } from '../../types';
 
 export const PartnerArticle: FC = () => {

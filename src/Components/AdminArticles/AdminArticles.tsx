@@ -10,11 +10,11 @@ import { CardActionArea } from '@mui/material';
 import Button from '@mui/material/Button';
 
 import { FC, useEffect, useState } from 'react';
-import { PartnerArticle } from '../../../types';
-import { getPartnersArticles } from '../../../api';
+import { IPartnerArticle } from '../../types';
+import { getPartnersArticles } from '../../api';
 
 export const AdminArticles: FC = () => {
-  const [articles, setArticles] = useState<PartnerArticle[]>([]);
+  const [articles, setArticles] = useState<IPartnerArticle[]>([]);
   useEffect(() => {
     (async () => {
       const articles = await getPartnersArticles();

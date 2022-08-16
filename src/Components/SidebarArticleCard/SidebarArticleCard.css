@@ -4,13 +4,13 @@
 }
 
 .sidebar-article-card:hover {
-  color: var(--color-accent);
+  color: var(--constant-accent);
 }
 
 .sidebar-article-card__media {
   position: relative;
   height: 150px;
-  background-color: var(--color-accent);
+  background-color: var(--constant-accent);
 }
 
 .sidebar-article-card__image {
@@ -41,5 +41,5 @@
 }
 
 .sidebar-article-card__source {
-  color: var(--color-grey2);
+  color: var(--constant-grey2);
 }

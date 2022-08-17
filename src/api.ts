@@ -13,7 +13,7 @@ import {
   limit,
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { IPartnerArticle } from './types';
+import { IPartnerArticle, Article } from './types';
 import { getAuth } from 'firebase/auth';
 
 export let firebaseApp: FirebaseApp;
@@ -35,6 +35,7 @@ export const initializeAPI = (): FirebaseApp => {
 };
 
 const partnersPostsCollection = 'partners-posts';
+const NEWS_COLLECTION = 'news';
 
 export const getPartnersArticles = async (): Promise<IPartnerArticle[]> => {
   const db = getFirestore();

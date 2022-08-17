@@ -13,6 +13,10 @@
   margin-left: 24px;
 }
 
+.header__controls {
+  margin-left: auto;
+}
+
 .footer {
   margin-top: 64px;
   padding-top: 24px;

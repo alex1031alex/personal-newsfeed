@@ -14,20 +14,6 @@
   --foreground-primary: var(--constant-black);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-zero: #131517;
-    --background-primary: var(--constant-black);
-    --foreground-primary: var(--constant-white);
-  }
-}
-
-[scheme="light"] {
-  --background-zero: var(--constant-white);
-  --background-primary: var(--constant-white);
-  --foreground-primary: var(--constant-black);
-}
-
 [scheme="dark"] {
   --background-zero: #131517;
   --background-primary: var(--constant-black);

@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { applyScheme } from '../../colorSchemeUtils';
+import { applyScheme, getSystemScheme } from '../../colorSchemeUtils';
 import classNames from 'classnames';
 import './ColorSchemeSwitcher.css';
 
@@ -10,7 +10,7 @@ export const ColorSchemeSwitcher: FC = () => {
 
   useEffect(() => {
     if (userScheme === 'auto') {
-      //  Код для применения системной темы
+      applyScheme(getSystemScheme());
     } else {
       applyScheme(userScheme);
     }

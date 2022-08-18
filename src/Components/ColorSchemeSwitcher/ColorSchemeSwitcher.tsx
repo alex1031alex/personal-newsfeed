@@ -1,19 +1,36 @@
 import React, { FC, useEffect } from 'react';
-import { applyScheme, getSystemScheme } from '../../colorSchemeUtils';
+import { applyScheme, getSavedScheme, getSystemScheme, removeSavedScheme } from '../../colorSchemeUtils';
 import classNames from 'classnames';
 import './ColorSchemeSwitcher.css';
 
 type ColorSchemeSwitcherValues = 'auto' | 'dark' | 'light';
 
+const matchMedia = window.matchMedia('(prefers-color-scheme: dark)');
+
 export const ColorSchemeSwitcher: FC = () => {
-  const [userScheme, setUserScheme] = React.useState<ColorSchemeSwitcherValues>('auto');
+  const [userScheme, setUserScheme] = React.useState<ColorSchemeSwitcherValues>(getSavedScheme() || 'auto');
 
   useEffect(() => {
     if (userScheme === 'auto') {
+      removeSavedScheme();
       applyScheme(getSystemScheme());
     } else {
-      applyScheme(userScheme);
+      applyScheme(userScheme, true);
     }
+  }, [userScheme]);
+
+  useEffect(() => {
+    const systemColorSchemeListener = () => {
+      if (userScheme === 'auto') {
+        applyScheme(getSystemScheme());
+      }
+    };
+
+    matchMedia.addEventListener('change', systemColorSchemeListener);
+
+    return () => {
+      matchMedia.removeEventListener('change', systemColorSchemeListener);
+    };
   }, [userScheme]);
 
   return (

@@ -5,9 +5,6 @@ import './common.css';
 import { App } from '@components/App/App';
 import { initializeAPI } from './api';
 import { AuthContextProvider } from './features/auth/AuthContextProvider';
-import { applyScheme, getSavedScheme, getSystemScheme } from './colorSchemeUtils';
-
-applyScheme(getSavedScheme() || getSystemScheme());
 
 const firebaseApp = initializeAPI();
 

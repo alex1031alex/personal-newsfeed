@@ -12,12 +12,16 @@
   --background-zero: var(--constant-white);
   --background-primary: var(--constant-white);
   --foreground-primary: var(--constant-black);
+
+  color-scheme: light;
 }
 
 [scheme="dark"] {
   --background-zero: #131517;
   --background-primary: var(--constant-black);
   --foreground-primary: var(--constant-white);
+
+  color-scheme: dark;
 }
 
 *:not(svg *) {

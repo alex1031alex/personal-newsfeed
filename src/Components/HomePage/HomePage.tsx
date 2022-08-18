@@ -5,8 +5,8 @@ import { NewsAPI, Category, Source } from '../../types';
 import { SidebarArticleCard } from '@components/SidebarArticleCard/SidebarArticleCard';
 import { Hero } from '../Hero/Hero';
 import { Link } from 'react-router-dom';
-import { categoryIds } from '../../utils';
 import { Title } from '../Title/Title';
+import { categoryIds } from '../../utils';
 
 type CategoriesRecord = Record<Category['id'], Category>;
 type SourcesRecord = Record<Source['id'], Source>;
@@ -49,6 +49,25 @@ export const HomePage: FC = () => {
       );
     });
   }, []);
+
+  // React.useEffect(() => {
+  //   setArticles(rawArticles.items);
+  //   setKarpovArticles(rawArticles.items);
+  //   setTrendArticles(rawArticles.items);
+  //   setCategories(
+  //     rawArticles.categories.reduce((acc: CategoriesRecord, categoryItem) => {
+  //       acc[categoryItem.id] = categoryItem;
+  //       return acc;
+  //     }, {})
+  //   );
+  //
+  //   setSources(
+  //     rawArticles.sources.reduce((acc: SourcesRecord, sourceItem) => {
+  //       acc[sourceItem.id] = sourceItem;
+  //       return acc;
+  //     }, {})
+  //   );
+  // }, []);
 
   const firstArticle = articles[0];
 

@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
-import './Page.css';
-import { Navigation } from '../Navigation/Navigation';
-import { Logo } from '../Logo/Logo';
-import { ColorSchemeSwitcher } from '@components/ColorSchemeSwitcher/ColorSchemeSwitcher';
+import React, { FC, useState } from "react";
+import "./Page.css";
+import { Navigation } from "../Navigation/Navigation";
+import { Logo } from "../Logo/Logo";
+import { ColorSchemeSwitcher } from "@components/ColorSchemeSwitcher/ColorSchemeSwitcher";
+import { ModalWrapper } from "../ModalWrapper/ModalWrapper";
 
 export const Page: FC = ({ children }) => {
+  const [emailModalShown, setEmailModalShown] = useState(true);
   return (
     <React.Fragment>
+      {emailModalShown && <ModalWrapper onClose={() => setEmailModalShown(false)}>Hello</ModalWrapper>}
       <header className="header">
         <div className="container header__container">
           <Logo />
@@ -26,7 +29,7 @@ export const Page: FC = ({ children }) => {
             <Navigation className="footer__navigation" />
           </div>
           <div className="footer__bottom">
-            Сделано на Frontend курсе в{' '}
+            Сделано на Frontend курсе в{" "}
             <a className="footer__link" href="https://karpov.courses/frontend" target="_blank" rel="noreferrer">
               Karpov.Courses
             </a>

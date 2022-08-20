@@ -3,13 +3,13 @@ import "./Page.css";
 import { Navigation } from "../Navigation/Navigation";
 import { Logo } from "../Logo/Logo";
 import { ColorSchemeSwitcher } from "@components/ColorSchemeSwitcher/ColorSchemeSwitcher";
-import { ModalWrapper } from "../ModalWrapper/ModalWrapper";
+import { EmailModal } from "../EmailModal/EmailModal";
 
 export const Page: FC = ({ children }) => {
   const [emailModalShown, setEmailModalShown] = useState(true);
   return (
     <React.Fragment>
-      {emailModalShown && <ModalWrapper onClose={() => setEmailModalShown(false)}>Hello</ModalWrapper>}
+      {emailModalShown && <EmailModal onClose={() => setEmailModalShown(false)}>Hello</EmailModal>}
       <header className="header">
         <div className="container header__container">
           <Logo />

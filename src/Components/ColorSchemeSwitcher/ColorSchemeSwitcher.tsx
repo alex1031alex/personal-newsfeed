@@ -1,17 +1,22 @@
-import React, { FC, useEffect } from 'react';
-import { applyScheme, getSavedScheme, getSystemScheme, removeSavedScheme } from '../../colorSchemeUtils';
-import classNames from 'classnames';
-import './ColorSchemeSwitcher.css';
+import React, { FC, useEffect, useRef } from "react";
+import { applyScheme, getSavedScheme, getSystemScheme, removeSavedScheme } from "../../colorSchemeUtils";
+import "./ColorSchemeSwitcher.css";
+import { Auto } from "../Icons/Auto";
+import { Sun } from "../Icons/Sun";
+import { Moon } from "../Icons/Moon";
+import { Dropdown } from "@components/Dropdown/Dropdown";
 
-type ColorSchemeSwitcherValues = 'auto' | 'dark' | 'light';
+type ColorSchemeSwitcherValues = "auto" | "dark" | "light";
 
-const matchMedia = window.matchMedia('(prefers-color-scheme: dark)');
+const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
 
 export const ColorSchemeSwitcher: FC = () => {
-  const [userScheme, setUserScheme] = React.useState<ColorSchemeSwitcherValues>(getSavedScheme() || 'auto');
+  const [userScheme, setUserScheme] = React.useState<ColorSchemeSwitcherValues>(getSavedScheme() || "auto");
+  const [dropdownShown, setDropdownShown] = React.useState(false);
+  const targetRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (userScheme === 'auto') {
+    if (userScheme === "auto") {
       removeSavedScheme();
       applyScheme(getSystemScheme());
     } else {
@@ -21,27 +26,66 @@ export const ColorSchemeSwitcher: FC = () => {
 
   useEffect(() => {
     const systemColorSchemeListener = () => {
-      if (userScheme === 'auto') {
+      if (userScheme === "auto") {
         applyScheme(getSystemScheme());
       }
     };
 
-    matchMedia.addEventListener('change', systemColorSchemeListener);
+    matchMedia.addEventListener("change", systemColorSchemeListener);
 
     return () => {
-      matchMedia.removeEventListener('change', systemColorSchemeListener);
+      matchMedia.removeEventListener("change", systemColorSchemeListener);
     };
   }, [userScheme]);
 
   return (
-    <select
-      className={classNames('color-scheme-switcher')}
-      onChange={(evt) => setUserScheme(evt.target.value as ColorSchemeSwitcherValues)}
-      value={userScheme}
-    >
-      <option value="dark">Dark</option>
-      <option value="light">Light</option>
-      <option value="auto">Auto</option>
-    </select>
+    <div className="color-scheme-switcher">
+      <button
+        className="color-scheme-switcher__value"
+        ref={targetRef}
+        onClick={() => {
+          setDropdownShown(!dropdownShown);
+        }}
+      >
+        {userScheme === "auto" && <Auto />}
+        {userScheme === "dark" && <Moon />}
+        {userScheme === "light" && <Sun />}
+      </button>
+      <Dropdown targetRef={targetRef} shown={dropdownShown} onShownChange={setDropdownShown}>
+        <button className="color-scheme-switcher__option" onClick={() => setUserScheme("auto")}>
+          <Auto />
+          <span className="color-scheme-switcher__text">Авто</span>
+          {userScheme === "auto" && (
+            <img
+              className="color-scheme-switcher__check"
+              src={require("../../images/check.svg")}
+              alt="Выбранная тема"
+            />
+          )}
+        </button>
+        <button className="color-scheme-switcher__option" onClick={() => setUserScheme("light")}>
+          <Sun />
+          <span className="color-scheme-switcher__text">Светлая</span>
+          {userScheme === "light" && (
+            <img
+              className="color-scheme-switcher__check"
+              src={require("../../images/check.svg")}
+              alt="Выбранная тема"
+            />
+          )}
+        </button>
+        <button className="color-scheme-switcher__option" onClick={() => setUserScheme("dark")}>
+          <Moon />
+          <span className="color-scheme-switcher__text">Темная</span>
+          {userScheme === "dark" && (
+            <img
+              className="color-scheme-switcher__check"
+              src={require("../../images/check.svg")}
+              alt="Выбранная тема"
+            />
+          )}
+        </button>
+      </Dropdown>
+    </div>
   );
 };

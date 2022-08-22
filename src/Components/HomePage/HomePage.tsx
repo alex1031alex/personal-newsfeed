@@ -1,27 +1,27 @@
-import React, { FC } from 'react';
-import { ArticleCard } from '@components/ArticleCard/ArticleCard';
-import './HomePage.css';
-import { NewsAPI, Category, Source } from '../../types';
-import { SidebarArticleCard } from '@components/SidebarArticleCard/SidebarArticleCard';
-import { Hero } from '../Hero/Hero';
-import { Link } from 'react-router-dom';
-import { Title } from '../Title/Title';
-import { categoryIds } from '../../utils';
+import React, { FC } from "react";
+import { ArticleCard } from "@components/ArticleCard/ArticleCard";
+import "./HomePage.css";
+import { NewsAPI, Category, Source } from "../../types";
+import { SidebarArticleCard } from "@components/SidebarArticleCard/SidebarArticleCard";
+import { Hero } from "../Hero/Hero";
+import { Link } from "react-router-dom";
+import { Title } from "../Title/Title";
+import { categoryIds } from "../../utils";
 
-type CategoriesRecord = Record<Category['id'], Category>;
-type SourcesRecord = Record<Source['id'], Source>;
+type CategoriesRecord = Record<Category["id"], Category>;
+type SourcesRecord = Record<Source["id"], Source>;
 
 export const HomePage: FC = () => {
-  const [articles, setArticles] = React.useState<NewsAPI['items']>([]);
-  const [karpovArticles, setKarpovArticles] = React.useState<NewsAPI['items']>([]);
-  const [trendArticles, setTrendArticles] = React.useState<NewsAPI['items']>([]);
+  const [articles, setArticles] = React.useState<NewsAPI["items"]>([]);
+  const [karpovArticles, setKarpovArticles] = React.useState<NewsAPI["items"]>([]);
+  const [trendArticles, setTrendArticles] = React.useState<NewsAPI["items"]>([]);
   const [categories, setCategories] = React.useState<CategoriesRecord>({});
   const [sources, setSources] = React.useState<SourcesRecord>([]);
 
   React.useEffect(() => {
     Promise.all<NewsAPI>([
       fetch(`https://frontend.karpovcourses.net/api/v2/ru/news`).then((res) => res.json()),
-      fetch(`https://frontend.karpovcourses.net/api/v2/ru/news/${categoryIds['karpov.courses']}`).then((res) =>
+      fetch(`https://frontend.karpovcourses.net/api/v2/ru/news/${categoryIds["karpov.courses"]}`).then((res) =>
         res.json()
       ),
       fetch(`https://frontend.karpovcourses.net/api/v2/ru/trends`).then((res) => res.json()),
@@ -49,25 +49,6 @@ export const HomePage: FC = () => {
       );
     });
   }, []);
-
-  // React.useEffect(() => {
-  //   setArticles(rawArticles.items);
-  //   setKarpovArticles(rawArticles.items);
-  //   setTrendArticles(rawArticles.items);
-  //   setCategories(
-  //     rawArticles.categories.reduce((acc: CategoriesRecord, categoryItem) => {
-  //       acc[categoryItem.id] = categoryItem;
-  //       return acc;
-  //     }, {})
-  //   );
-  //
-  //   setSources(
-  //     rawArticles.sources.reduce((acc: SourcesRecord, sourceItem) => {
-  //       acc[sourceItem.id] = sourceItem;
-  //       return acc;
-  //     }, {})
-  //   );
-  // }, []);
 
   const firstArticle = articles[0];
 

@@ -1,12 +1,26 @@
-import React, { FC } from 'react';
-import './Page.css';
-import { Navigation } from '../Navigation/Navigation';
-import { Logo } from '../Logo/Logo';
-import { ColorSchemeSwitcher } from '@components/ColorSchemeSwitcher/ColorSchemeSwitcher';
+import React, { FC, useState } from "react";
+import "./Page.css";
+import { Navigation } from "../Navigation/Navigation";
+import { Logo } from "../Logo/Logo";
+import { ColorSchemeSwitcher } from "@components/ColorSchemeSwitcher/ColorSchemeSwitcher";
+import { EmailModal } from "../EmailModal/EmailModal";
+
+const LS_EMAIL_SHOWN_KEY = "newsfeed:email_modal_shown";
 
 export const Page: FC = ({ children }) => {
+  const [emailModalShown, setEmailModalShown] = useState(!localStorage.getItem(LS_EMAIL_SHOWN_KEY));
   return (
     <React.Fragment>
+      {emailModalShown && (
+        <EmailModal
+          onClose={() => {
+            localStorage.setItem(LS_EMAIL_SHOWN_KEY, "true");
+            setEmailModalShown(false);
+          }}
+        >
+          Hello
+        </EmailModal>
+      )}
       <header className="header">
         <div className="container header__container">
           <Logo />
@@ -26,7 +40,7 @@ export const Page: FC = ({ children }) => {
             <Navigation className="footer__navigation" />
           </div>
           <div className="footer__bottom">
-            Сделано на Frontend курсе в{' '}
+            Сделано на Frontend курсе в{" "}
             <a className="footer__link" href="https://karpov.courses/frontend" target="_blank" rel="noreferrer">
               Karpov.Courses
             </a>

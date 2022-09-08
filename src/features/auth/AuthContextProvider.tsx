@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useEffect, useState } from 'react';
+import React, { createContext, FC, useContext, useEffect, useState } from "react";
 import {
   getAuth,
   User,
@@ -9,10 +9,10 @@ import {
   ProviderId,
   GoogleAuthProvider,
   GithubAuthProvider,
-} from 'firebase/auth';
-import { TAuthContext } from './types';
-import { FirebaseApp } from 'firebase/app';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+} from "firebase/auth";
+import { TAuthContext } from "./types";
+import { FirebaseApp } from "firebase/app";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 export const ALLOWED_OAUTH_PROVIDERS: Record<string, any> = {
   [ProviderId.GOOGLE]: new GoogleAuthProvider(),
@@ -37,11 +37,11 @@ export const useAuthContext = (): TAuthContext => {
 
 const isUserAdmin = async (firebaseApp: FirebaseApp) => {
   const db = getFirestore(firebaseApp);
-  return await getDoc(doc(db, '/internal/auth'));
+  return await getDoc(doc(db, "/internal/auth"));
 };
 
 export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
-  const [isAuthenticate, setIsAuthenticate] = useState<TAuthContext['isAuthenticate']>(null);
+  const [isAuthenticate, setIsAuthenticate] = useState<TAuthContext["isAuthenticate"]>(null);
   const [user, setUser] = useState<User | null>(null);
   const [auth] = useState(getAuth(firebaseApp));
 
@@ -51,7 +51,7 @@ export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
     }
 
     auth.setPersistence(browserLocalPersistence);
-    auth.languageCode = 'en';
+    auth.languageCode = "en";
 
     auth.onAuthStateChanged((user) => {
       if (user) {

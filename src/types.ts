@@ -28,7 +28,7 @@ export interface Source {
   site?: string;
 }
 
-export type CategoryNames = 'politics' | 'sport' | 'tech' | 'karpov.courses' | 'fashion' | 'other';
+export type CategoryNames = "politics" | "sport" | "tech" | "karpov.courses" | "fashion" | "other";
 
 export interface Category {
   id: number;
@@ -48,7 +48,7 @@ export interface Article {
 
 export interface IPartnerArticle {
   id: string;
-  'company-name': string;
+  "company-name": string;
   title: string;
   image: string;
   description: string;

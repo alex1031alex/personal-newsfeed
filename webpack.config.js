@@ -1,69 +1,71 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const StylelintPlugin = require('stylelint-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlInlineScriptWebpackPlugin = require('html-inline-script-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
+const StylelintPlugin = require("stylelint-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlInlineScriptWebpackPlugin = require("html-inline-script-webpack-plugin");
 
-const mode = process.env.NODE_ENV || 'production';
+const mode = process.env.NODE_ENV || "production";
 
 module.exports = {
   mode,
   entry: {
-    main: './src/script.tsx',
-    initColorScheme: './src/initColorScheme.ts',
+    main: "./src/index.tsx",
+    initColorScheme: "./src/initColorScheme.ts",
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
-    publicPath: '/',
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].[contenthash].js",
+    publicPath: "/",
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        use: 'babel-loader',
+        use: "babel-loader",
         exclude: /node_modules/,
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.svg$/,
-        type: 'asset/resource',
+        type: "asset/resource",
       },
       {
         test: /\.(ts|tsx)$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: [".js", ".ts", ".tsx"],
     alias: {
-      '@components': path.resolve('./src/Components'),
+      "@components": path.resolve("./src/components"),
+      "@features": path.resolve("./src/features"),
+      "@app": path.resolve("./src/app"),
     },
   },
   optimization: {
-    runtimeChunk: mode === 'production' ? false : 'single',
+    runtimeChunk: mode === "production" ? false : "single",
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: "./src/index.html",
     }),
     new HtmlInlineScriptWebpackPlugin({
       scriptMatchPattern: [/initColorScheme\..+\.js$/],
     }),
     new MiniCssExtractPlugin({
-      filename: 'bundle.[contenthash].css',
+      filename: "bundle.[contenthash].css",
     }),
     new StylelintPlugin({
-      files: 'src/{**/*,*}.css',
+      files: "src/{**/*,*}.css",
     }),
     new ESLintPlugin({
-      files: 'src/{**/*,*}.{tsx,ts}',
+      files: "src/{**/*,*}.{tsx,ts}",
     }),
   ],
   devServer: {

@@ -1,4 +1,4 @@
-import { initializeApp, FirebaseApp } from 'firebase/app';
+import { initializeApp, FirebaseApp } from "firebase/app";
 import {
   collection,
   getDocs,
@@ -11,21 +11,21 @@ import {
   query,
   orderBy,
   limit,
-} from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { IPartnerArticle } from './types';
-import { getAuth } from 'firebase/auth';
+} from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { IPartnerArticle } from "./types";
+import { getAuth } from "firebase/auth";
 
 export let firebaseApp: FirebaseApp;
 
 export const initializeAPI = (): FirebaseApp => {
   firebaseApp = initializeApp({
-    apiKey: 'AIzaSyBFhFVJCx9eMtUu_sXmHOTZN6xVQzXGU6Y',
-    authDomain: 'karpov-news.firebaseapp.com',
-    projectId: 'karpov-news',
-    storageBucket: 'karpov-news.appspot.com',
-    messagingSenderId: '1047898012019',
-    appId: '1:1047898012019:web:0e1d222393763b5856ed06',
+    apiKey: "AIzaSyBFhFVJCx9eMtUu_sXmHOTZN6xVQzXGU6Y",
+    authDomain: "karpov-news.firebaseapp.com",
+    projectId: "karpov-news",
+    storageBucket: "karpov-news.appspot.com",
+    messagingSenderId: "1047898012019",
+    appId: "1:1047898012019:web:0e1d222393763b5856ed06",
   });
 
   getAuth(firebaseApp);
@@ -34,7 +34,7 @@ export const initializeAPI = (): FirebaseApp => {
   return firebaseApp;
 };
 
-const partnersPostsCollection = 'partners-posts';
+const partnersPostsCollection = "partners-posts";
 
 export const getPartnersArticles = async (): Promise<IPartnerArticle[]> => {
   const db = getFirestore();
@@ -44,7 +44,7 @@ export const getPartnersArticles = async (): Promise<IPartnerArticle[]> => {
     const querySnapshot = await getDocs(collection(db, partnersPostsCollection));
 
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as Omit<IPartnerArticle, 'id'>;
+      const data = doc.data() as Omit<IPartnerArticle, "id">;
 
       articles.push({
         id: doc.id,
@@ -58,7 +58,7 @@ export const getPartnersArticles = async (): Promise<IPartnerArticle[]> => {
   return articles;
 };
 
-export const createPartnerArticle = async (data: Omit<IPartnerArticle, 'id' | 'created'>): Promise<any> => {
+export const createPartnerArticle = async (data: Omit<IPartnerArticle, "id" | "created">): Promise<any> => {
   const db = getFirestore();
 
   try {
@@ -68,7 +68,7 @@ export const createPartnerArticle = async (data: Omit<IPartnerArticle, 'id' | 'c
   }
 };
 
-export const updatePartnerArticle = async (id: string, data: Omit<IPartnerArticle, 'id' | 'created'>): Promise<any> => {
+export const updatePartnerArticle = async (id: string, data: Omit<IPartnerArticle, "id" | "created">): Promise<any> => {
   const db = getFirestore();
   const ref = doc(db, partnersPostsCollection, id);
 
@@ -98,14 +98,14 @@ export const getPartnerArticle = async (id: string): Promise<IPartnerArticle> =>
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      const data = docSnap.data() as Omit<IPartnerArticle, 'id'>;
+      const data = docSnap.data() as Omit<IPartnerArticle, "id">;
 
       return {
         id: docSnap.id,
         ...data,
       };
     } else {
-      throw Error('Такой статьи нет');
+      throw Error("Такой статьи нет");
     }
   } catch (error) {
     return Promise.reject(error);
@@ -131,11 +131,11 @@ export const getMainPartnerArticle = async (): Promise<IPartnerArticle | null> =
   let article = null;
 
   try {
-    const q = query(collection(db, partnersPostsCollection), orderBy('created', 'desc'), limit(1));
+    const q = query(collection(db, partnersPostsCollection), orderBy("created", "desc"), limit(1));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as Omit<IPartnerArticle, 'id'>;
+      const data = doc.data() as Omit<IPartnerArticle, "id">;
 
       article = {
         id: doc.id,

@@ -1,6 +1,6 @@
 {
   "printWidth": 120,
-  "doubleQuote": true,
+  "singleQuote": false,
   "overrides": [
     {
       "files": "*.css",

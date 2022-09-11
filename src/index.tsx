@@ -2,14 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
-import "./common.css";
-import { App } from "@app/components/App/App";
-import { initializeAPI } from "./api";
+import "./app/common.css";
+import { App } from "./app/components/App/App";
+import { initializeAPI } from "./app/api";
 import { AuthContextProvider } from "./features/auth/AuthContextProvider";
+import { store } from "./app/store";
 const firebaseApp = initializeAPI();
 
 ReactDOM.render(
-  <Provider store={}>
+  <Provider store={store}>
     <AuthContextProvider firebaseApp={firebaseApp}>
       <Router>
         <App />

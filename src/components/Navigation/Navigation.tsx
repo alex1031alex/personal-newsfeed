@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
 import "./Navigation.css";
-import { categoryTitles } from "../../utils";
+import { categoryTitles } from "../../features/categories/constants";
 import classNames from "classnames";
 
 interface Props {

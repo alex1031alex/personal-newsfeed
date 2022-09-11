@@ -1,35 +1,22 @@
 import React, { FC, Reducer, useReducer, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import "./LoginContainer.css";
-
-import { LoginForm, TLoginField } from "../../../components/LoginForm/LoginForm";
-import { ALLOWED_OAUTH_PROVIDERS, useAuthContext } from "../AuthContextProvider";
-import { validateEmail } from "./utils";
-import { TLoginWithEmailAndPasswordResult } from "../types";
-
-import Typography from "@mui/material/Typography";
-import { Link } from "@mui/material";
+import { ProviderId } from "firebase/auth";
+import { LoginForm, TLoginField } from "../components/LoginForm/LoginForm";
+import { Link, Divider, Typography } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/Github";
 import LoginIcon from "@mui/icons-material/Login";
-import { ProviderId } from "firebase/auth";
+
+import "./LoginContainer.css";
+import { validateEmail } from "./utils";
+import { ALLOWED_OAUTH_PROVIDERS, useAuthContext } from "../AuthContextProvider";
+import { TLoginWithEmailAndPasswordResult } from "../types";
 
 type TLoginFieldState = Omit<TLoginField, "onChange">;
 
 type TAction = {
   type: "change" | "error";
   value: string;
-};
-
-const getOAuthProviderIcon = (provider: string) => {
-  switch (provider) {
-    case ProviderId.GOOGLE:
-      return <GoogleIcon fontSize="inherit" />;
-    case ProviderId.GITHUB:
-      return <GitHubIcon fontSize="inherit" />;
-    default:
-      return <LoginIcon fontSize="inherit" />;
-  }
 };
 
 const reducer = (state: TLoginFieldState, action: TAction): TLoginFieldState => {
@@ -53,11 +40,21 @@ const reducer = (state: TLoginFieldState, action: TAction): TLoginFieldState => 
   }
 };
 
+const getOAuthProviderIcon = (provider: string) => {
+  switch (provider) {
+    case ProviderId.GOOGLE:
+      return <GoogleIcon fontSize="inherit" />;
+    case ProviderId.GITHUB:
+      return <GitHubIcon fontSize="inherit" />;
+    default:
+      return <LoginIcon fontSize="inherit" />;
+  }
+};
+
 export const LoginContainer: FC = () => {
   const history = useHistory();
   const { state: locationState } = useLocation<{ from: string }>();
   const { loginWithEmailAndPassword, loginWithOauthPopup } = useAuthContext();
-
   const [authError, setAuthError] = useState("");
   const [emailState, dispatchEmail] = useReducer<Reducer<TLoginFieldState, TAction>>(reducer, {
     name: "email",
@@ -122,6 +119,7 @@ export const LoginContainer: FC = () => {
         }}
         onSubmit={onSubmit}
       />
+      <Divider />
       <div className="login-oauth-container">
         {Object.keys(ALLOWED_OAUTH_PROVIDERS).map((key) => {
           return (

@@ -11,7 +11,7 @@ module.exports = {
   mode,
   entry: {
     main: "./src/index.tsx",
-    initColorScheme: "./src/initColorScheme.ts",
+    initColorScheme: "./src/features/colorScheme/initColorScheme.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -53,11 +53,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/app/index.html",
     }),
-    new HtmlInlineScriptWebpackPlugin({
-      scriptMatchPattern: [/initColorScheme\..+\.js$/],
-    }),
+    new HtmlInlineScriptWebpackPlugin([/initColorScheme\..+\.js$/]),
     new MiniCssExtractPlugin({
       filename: "bundle.[contenthash].css",
     }),

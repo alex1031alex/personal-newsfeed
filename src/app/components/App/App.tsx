@@ -1,14 +1,14 @@
 import React, { FC, useEffect } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 
-import { HomePage } from "@components/HomePage/HomePage";
-import { ArticlePage } from "@components/ArticlePage/ArticlePage";
-import { CategoryPage } from "@components/CategoryPage/CategoryPage";
-import { AdminPage } from "@components/Adminpage/AdminPage";
 import { Page } from "@components/Page/Page";
-import { AdminArticles } from "@components/AdminArticles/AdminArticles";
-import { AdminArticlesItem } from "@components/AdminArticlesItem/AdminArticlesItem";
-import { PrivateRoute } from "@components/PrivateRoute/PrivateRoute";
+import { HomePage } from "../../../features/articlesList/components/HomePage/HomePage";
+import { CategoryPage } from "../../../features/categoryArticles/components/CategoryPage/CategoryPage";
+import { ArticlePage } from "../../../features/articleItem/components/ArticlePage/ArticlePage";
+import { AdminPage } from "../../../features/admin/components/AdminPage/AdminPage";
+import { AdminArticles } from "../../../features/admin/components/AdminArticles/AdminArticles";
+import { AdminArticlesItem } from "../../../features/admin/components/AdminArticleItem/AdminArticlesItem";
+import { PrivateRoute } from "../../../features/auth/components/PrivateRoute/PrivateRoute";
 import { LoginContainer } from "../../../features/auth/login/LoginContainer";
 
 export const App: FC = () => {
@@ -20,17 +20,17 @@ export const App: FC = () => {
 
   return (
     <Switch>
-      <Route path="/login" exact>
+      <Route path="/login">
         <Page>
           <LoginContainer />
         </Page>
       </Route>
-      <PrivateRoute exact path="/admin/create">
+      <PrivateRoute path="/admin" exact>
         <AdminPage>
           <AdminArticlesItem />
         </AdminPage>
       </PrivateRoute>
-      <PrivateRoute path="/admin" exact>
+      <PrivateRoute path="/admin/create">
         <AdminPage>
           <AdminArticles />
         </AdminPage>

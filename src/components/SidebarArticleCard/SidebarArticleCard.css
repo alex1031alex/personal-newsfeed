@@ -10,7 +10,6 @@
 .sidebar-article-card__media {
   position: relative;
   height: 150px;
-  background-color: var(--constant-accent);
 }
 
 .sidebar-article-card__image {
@@ -32,8 +31,6 @@
 .sidebar-article-card__title {
   margin: 12px 0 8px;
   font-weight: 700;
-
-  /* Высота текста не более трех строк */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;

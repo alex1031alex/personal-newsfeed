@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./HomePage.css";
@@ -9,12 +9,16 @@ import { Hero } from "@components/Hero/Hero";
 import { Title } from "@components/Title/Title";
 import { PartnerArticle } from "../../../partnersArticle/components/PartnerArticle/PartnerArticle";
 import { fetchNews, fetchTrends } from "../../actions";
-import { Dispatch } from "../../../../app/store";
+import { Dispatch } from "@app/store";
 import { getNews, getTrends } from "../../selectors";
 import { fetchCategoryArticles } from "../../../categoryArticles/actions";
 import { getCategoryNews } from "../../../categoryArticles/selectors";
 import { getCategories } from "../../../categories/selectors";
 import { getSources } from "../../../sources/selectors";
+import { HeroSkeleton } from "@components/Hero/HeroSkeleton";
+import { ArticleCardSkeleton } from "@components/ArticleCard/ArticleCardSkeleton";
+import { SidebarArticleCardSkeleton } from "@components/SidebarArticleCard/SidebarArticleCardSkeleton";
+import { repeat } from "@app/utils";
 
 export const HomePage: FC = () => {
   const dispatch = useDispatch<Dispatch>();
@@ -23,12 +27,63 @@ export const HomePage: FC = () => {
   const karpovArticles = useSelector(getCategoryNews(categoryIds["karpov.courses"]));
   const categories = useSelector(getCategories);
   const sources = useSelector(getSources);
+  const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
-    dispatch(fetchNews);
-    dispatch(fetchTrends);
-    dispatch(fetchCategoryArticles(categoryIds["karpov.courses"]));
+    setLoading(true);
+    Promise.all([
+      dispatch(fetchNews()),
+      dispatch(fetchTrends()),
+      dispatch(fetchCategoryArticles(categoryIds["karpov.courses"])),
+    ]).then(() => {
+      setLoading(false);
+    });
   }, []);
+
+  if (loading) {
+    return (
+      <div className="home-page">
+        <div className="home-page__hero-link">
+          <HeroSkeleton className="home-page__hero" hasText={true} />
+        </div>
+        <section className="container home-page__section">
+          <Title Component="h2" className="home-page__title">
+            В тренде
+          </Title>
+          <div className="grid">
+            {repeat((i) => {
+              return (
+                <ArticleCardSkeleton
+                  className="home-page__trends-item"
+                  hasImage={false}
+                  hasDescription={false}
+                  key={i}
+                />
+              );
+            }, 6)}
+          </div>
+        </section>
+
+        <section className="container home-page__section">
+          <Title Component="h2" className="home-page__title">
+            Karpov
+          </Title>
+          <div className="grid">
+            <section className="home-page__content">
+              {repeat((i) => {
+                return <ArticleCardSkeleton className="home-page__article-card" key={i} />;
+              }, 4)}
+            </section>
+            <section className="home-page__sidebar">
+              {repeat((i) => {
+                return <SidebarArticleCardSkeleton className="home-page__sidebar-item" key={i} />;
+              }, 2)}
+            </section>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   const firstArticle = articles[0];
 

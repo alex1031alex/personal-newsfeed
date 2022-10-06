@@ -20,7 +20,6 @@
 }
 
 .email-modal__link {
-  cursor: pointer;
   color: var(--constant-accent);
 }
 

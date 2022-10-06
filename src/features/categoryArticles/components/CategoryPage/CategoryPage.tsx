@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./CategoryPage.css";
@@ -7,11 +7,15 @@ import { categoryIds, categoryTitles } from "../../../categories/constants";
 import { SidebarArticleCard } from "@components/SidebarArticleCard/SidebarArticleCard";
 import { Hero } from "@components/Hero/Hero";
 import { ArticleCard } from "@components/ArticleCard/ArticleCard";
-import { Dispatch } from "../../../../app/store";
+import { ArticleCardSkeleton } from "@components/ArticleCard/ArticleCardSkeleton";
+import { Dispatch } from "@app/store";
 import { fetchCategoryArticles } from "../../actions";
 import { getCategoryNews } from "../../selectors";
 import { getCategories } from "../../../categories/selectors";
 import { getSources } from "../../../sources/selectors";
+import { HeroSkeleton } from "@components/Hero/HeroSkeleton";
+import { SidebarArticleCardSkeleton } from "@components/SidebarArticleCard/SidebarArticleCardSkeleton";
+import { repeat } from "@app/utils";
 
 export const CategoryPage: FC = () => {
   const { category }: { category: CategoryNames } = useParams();
@@ -19,16 +23,40 @@ export const CategoryPage: FC = () => {
   const articles = useSelector(getCategoryNews(categoryIds[category]));
   const categories = useSelector(getCategories);
   const sources = useSelector(getSources);
+  const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
-    dispatch(fetchCategoryArticles(categoryIds[category]));
+    setLoading(true);
+    dispatch(fetchCategoryArticles(categoryIds[category])).then(() => {
+      setLoading(false);
+    });
   }, [category]);
+
+  if (loading) {
+    return (
+      <section className="category-page">
+        <HeroSkeleton title={categoryTitles[category]} className="category-page__hero" hasImage={true} />
+        <div className="container grid">
+          <section className="category-page__content">
+            {repeat((i) => {
+              return <ArticleCardSkeleton className="category-page__item" key={i} />;
+            }, 6)}
+          </section>
+          <section className="category-page__sidebar">
+            {repeat((i) => {
+              return <SidebarArticleCardSkeleton className="category-page__sidebar-item" key={i} />;
+            }, 3)}
+          </section>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="category-page">
       <Hero
         title={categoryTitles[category]}
-        image="https://firebasestorage.googleapis.com/v0/b/karpov-news-e31c6.appspot.com/o/ms1.jpg?alt=media&token=6bd2e945-dc15-4cb2-83ff-7b4d7df14072"
+        image={require(`@images/categories/${category}.jpg`)}
         className="category-page__hero"
       />
       <div className="container grid">

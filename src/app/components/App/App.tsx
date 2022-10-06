@@ -1,21 +1,25 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 
 import { Page } from "@components/Page/Page";
-import { HomePage } from "../../../features/articlesList/components/HomePage/HomePage";
-import { CategoryPage } from "../../../features/categoryArticles/components/CategoryPage/CategoryPage";
-import { ArticlePage } from "../../../features/articleItem/components/ArticlePage/ArticlePage";
-import { AdminPage } from "../../../features/admin/components/AdminPage/AdminPage";
-import { AdminArticles } from "../../../features/admin/components/AdminArticles/AdminArticles";
-import { AdminArticlesItem } from "../../../features/admin/components/AdminArticleItem/AdminArticlesItem";
-import { PrivateRoute } from "../../../features/auth/components/PrivateRoute/PrivateRoute";
-import { LoginContainer } from "../../../features/auth/login/LoginContainer";
+import { HomePage } from "@features/articlesList/components/HomePage/HomePage";
+import { CategoryPage } from "@features/categoryArticles/components/CategoryPage/CategoryPage";
+import { ArticlePage } from "@features/articleItem/components/ArticlePage/ArticlePage";
+import { AdminPage } from "@features/admin/components/AdminPage/AdminPage";
+import { AdminArticles } from "@features/admin/components/AdminArticles/AdminArticles";
+import { AdminArticlesItem } from "@features/admin/components/AdminArticleItem/AdminArticlesItem";
+import { PrivateRoute } from "@features/auth/components/PrivateRoute/PrivateRoute";
+import { LoginContainer } from "@features/auth/login/LoginContainer";
 
 export const App: FC = () => {
   const { pathname } = useLocation();
+  const prevPathName = useRef(pathname);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (pathname !== prevPathName.current) {
+      prevPathName.current = pathname;
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
 
   return (

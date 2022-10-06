@@ -1,0 +1,20 @@
+.skeleton-text {
+  color: var(--skeleton-color);
+  width: 100%;
+}
+
+.skeleton-text--dark {
+  color: var(--constant-white-alpha12);
+}
+
+.skeleton-text__row {
+  height: 1em;
+  display: inline-block;
+  width: 100%;
+  background-color: currentColor;
+  vertical-align: middle;
+}
+
+.skeleton-text__row:last-child {
+  width: 60%;
+}

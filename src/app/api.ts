@@ -13,13 +13,13 @@ import {
   limit,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { ArticleItemAPI } from "../features/articleItem/types";
-import { IPartnerArticle } from "../features/partnersArticle/types";
-import { NewsAPI } from "../features/articlesList/types";
-import { RelatedArticlesAPI } from "../features/relatedNews/types";
-import { Source } from "../features/sources/types";
+import { ArticleItemAPI } from "@features/articleItem/types";
+import { IPartnerArticle } from "@features/partnersArticle/types";
+import { NewsAPI } from "@features/articlesList/types";
+import { RelatedArticlesAPI } from "@features/relatedNews/types";
+import { Source } from "@features/sources/types";
 import { getAuth } from "firebase/auth";
-import { Category } from "../features/categories/types";
+import { Category } from "@features/categories/types";
 
 export let firebaseApp: FirebaseApp;
 

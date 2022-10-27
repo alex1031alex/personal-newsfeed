@@ -2,11 +2,13 @@ import React, { HTMLAttributes, FC, useEffect } from "react";
 import { createPortal } from "react-dom";
 import classNames from "classnames";
 import "./ModalWrapper.css";
+import { CSSTransition } from "react-transition-group";
 
 interface ModalWrapperProps extends HTMLAttributes<HTMLElement> {
   alignX?: "start" | "center" | "end";
   alignY?: "start" | "center" | "end";
   onClose: VoidFunction;
+  shown: boolean;
 }
 
 export const ModalWrapper: FC<ModalWrapperProps> = ({
@@ -15,6 +17,7 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
   alignY = "center",
   className,
   onClose,
+  shown,
   ...restProps
 }: ModalWrapperProps) => {
   useEffect(() => {
@@ -40,24 +43,32 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
   });
 
   return createPortal(
-    <div
-      className={classNames(
-        "modal-wrapper",
-        `modal-wrapper--alignX-${alignX}`,
-        `modal-wrapper--alignY-${alignY}`,
-        className
-      )}
-      onClick={onClose}
-      {...restProps}
+    <CSSTransition
+      in={shown}
+      mountOnEnter={true}
+      unmountOnExit={true}
+      timeout={300}
+      classNames="modal-wrapper-animation"
     >
       <div
-        className="modal-wrapper__children"
-        onClick={(evt) => evt.stopPropagation()}
-        onKeyDown={(evt) => evt.stopPropagation()}
+        className={classNames(
+          "modal-wrapper",
+          `modal-wrapper--alignX-${alignX}`,
+          `modal-wrapper--alignY-${alignY}`,
+          className
+        )}
+        onClick={onClose}
+        {...restProps}
       >
-        {children}
+        <div
+          className="modal-wrapper__children"
+          onClick={(evt) => evt.stopPropagation()}
+          onKeyDown={(evt) => evt.stopPropagation()}
+        >
+          {children}
+        </div>
       </div>
-    </div>,
+    </CSSTransition>,
     document.getElementById("overlay") as HTMLElement
   );
 };

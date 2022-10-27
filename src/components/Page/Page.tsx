@@ -3,15 +3,19 @@ import { useDispatch } from "react-redux";
 import "./Page.css";
 import { Navigation } from "../Navigation/Navigation";
 import { Logo } from "../Logo/Logo";
-import { EmailModal } from "../../features/subscribeNotification/components/EmailModal/EmailModal";
-import { ColorSchemeSwitcher } from "../../features/colorScheme/components/ColorSchemeSwitcher/ColorSchemeSwitcher";
-import { Dispatch } from "../../app/store";
-import { fetchCategories } from "../../features/categories/actions";
-import { fetchSources } from "../../features/sources/actions";
+import { EmailModal } from "@features/subscribeNotification/components/EmailModal/EmailModal";
+import { ColorSchemeSwitcher } from "@features/colorScheme/components/ColorSchemeSwitcher/ColorSchemeSwitcher";
+import { Dispatch } from "@app/store";
+import { fetchCategories } from "@features/categories/actions";
+import { fetchSources } from "@features/sources/actions";
 
 const LS_EMAIL_SHOWN_KEY = "newsfeed:email_modal_shown";
 
-export const Page: FC = ({ children }) => {
+interface TProps {
+  children?: React.ReactNode;
+}
+
+export const Page: FC<TProps> = ({ children }) => {
   const dispatch = useDispatch<Dispatch>();
   const [emailModalShown, setEmailModalShown] = useState(!localStorage.getItem(LS_EMAIL_SHOWN_KEY));
 
@@ -22,16 +26,13 @@ export const Page: FC = ({ children }) => {
 
   return (
     <React.Fragment>
-      {emailModalShown && (
-        <EmailModal
-          onClose={() => {
-            localStorage.setItem(LS_EMAIL_SHOWN_KEY, "true");
-            setEmailModalShown(false);
-          }}
-        >
-          Hello
-        </EmailModal>
-      )}
+      <EmailModal
+        shown={emailModalShown}
+        onClose={() => {
+          localStorage.setItem(LS_EMAIL_SHOWN_KEY, "true");
+          setEmailModalShown(false);
+        }}
+      />
       <header className="header">
         <div className="container header__container">
           <Logo />

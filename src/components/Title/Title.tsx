@@ -5,6 +5,7 @@ import "./Title.css";
 interface TitleProps {
   Component?: ElementType;
   className?: string;
+  children: string | JSX.Element;
 }
 
 export const Title: FC<TitleProps> = ({ Component = "h1", children, className }) => {

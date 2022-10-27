@@ -19,7 +19,11 @@ import { useAuthContext } from "../../../auth/AuthContextProvider";
 
 const drawerWidth = 300;
 
-export const AdminPage: FC = ({ children }) => {
+interface TProps {
+  children?: React.ReactNode;
+}
+
+export const AdminPage: FC<TProps> = ({ children }) => {
   const { logOut } = useAuthContext();
   const history = useHistory();
   const onLogoutClick = () => {

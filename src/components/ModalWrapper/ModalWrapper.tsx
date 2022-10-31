@@ -21,12 +21,14 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
   ...restProps
 }: ModalWrapperProps) => {
   useEffect(() => {
-    document.documentElement.classList.add("--prevent-scroll");
+    if (shown) {
+      document.documentElement.classList.add("--prevent-scroll");
+    }
 
     return () => {
       document.documentElement.classList.remove("--prevent-scroll");
     };
-  }, []);
+  }, [shown]);
 
   useEffect(() => {
     const documentKeyDownListener = (evt: KeyboardEvent) => {

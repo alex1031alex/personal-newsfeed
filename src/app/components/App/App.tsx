@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
-
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Page } from "@components/Page/Page";
 import { HomePage } from "@features/articlesList/components/HomePage/HomePage";
 import { CategoryPage } from "@features/categoryArticles/components/CategoryPage/CategoryPage";
@@ -12,7 +12,8 @@ import { PrivateRoute } from "@features/auth/components/PrivateRoute/PrivateRout
 import { LoginContainer } from "@features/auth/login/LoginContainer";
 
 export const App: FC = () => {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname } = location;
   const prevPathName = useRef(pathname);
 
   useEffect(() => {
@@ -23,42 +24,48 @@ export const App: FC = () => {
   }, [pathname]);
 
   return (
-    <Switch>
-      <Route path="/login">
-        <Page>
-          <LoginContainer />
-        </Page>
-      </Route>
-      <PrivateRoute path="/admin" exact>
-        <AdminPage>
-          <AdminArticlesItem />
-        </AdminPage>
-      </PrivateRoute>
-      <PrivateRoute path="/admin/create">
-        <AdminPage>
-          <AdminArticles />
-        </AdminPage>
-      </PrivateRoute>
-      <PrivateRoute path="/admin/edit/:id">
-        <AdminPage>
-          <AdminArticlesItem />
-        </AdminPage>
-      </PrivateRoute>
-      <Route path="/article/:id">
-        <Page>
-          <ArticlePage />
-        </Page>
-      </Route>
-      <Route path="/:category">
-        <Page>
-          <CategoryPage />
-        </Page>
-      </Route>
-      <Route path="/">
-        <Page>
-          <HomePage />
-        </Page>
-      </Route>
-    </Switch>
+    <TransitionGroup>
+      <CSSTransition key={pathname} timeout={300} classNames="page-animation">
+        <div>
+          <Switch location={location}>
+            <Route path="/login">
+              <Page>
+                <LoginContainer />
+              </Page>
+            </Route>
+            <PrivateRoute path="/admin" exact>
+              <AdminPage>
+                <AdminArticlesItem />
+              </AdminPage>
+            </PrivateRoute>
+            <PrivateRoute path="/admin/create">
+              <AdminPage>
+                <AdminArticles />
+              </AdminPage>
+            </PrivateRoute>
+            <PrivateRoute path="/admin/edit/:id">
+              <AdminPage>
+                <AdminArticlesItem />
+              </AdminPage>
+            </PrivateRoute>
+            <Route path="/article/:id">
+              <Page>
+                <ArticlePage />
+              </Page>
+            </Route>
+            <Route path="/:category">
+              <Page>
+                <CategoryPage />
+              </Page>
+            </Route>
+            <Route path="/">
+              <Page>
+                <HomePage />
+              </Page>
+            </Route>
+          </Switch>
+        </div>
+      </CSSTransition>
+    </TransitionGroup>
   );
 };

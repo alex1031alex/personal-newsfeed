@@ -5,6 +5,7 @@ import "./Source.css";
 interface SourceProps {
   className?: string;
   href?: string;
+  children?: string;
 }
 
 export const Source: FC<SourceProps> = ({ children = "Источник", href, className }) => {

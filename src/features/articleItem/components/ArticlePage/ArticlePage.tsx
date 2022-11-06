@@ -14,8 +14,6 @@ import { getRelatedArticles } from "../../../relatedNews/selectors";
 import { getSources } from "../../../sources/selectors";
 import { fetchArticleItem } from "../../actions";
 import { fetchRelatedArticles } from "../../../relatedNews/actions";
-import { setArticleItem } from "../../slice";
-import { Dispatch } from "@app/store";
 import { HeroSkeleton } from "@components/Hero/HeroSkeleton";
 import { SkeletonText } from "@components/SkeletonText/SkeletonText";
 import { repeat } from "@app/utils";
@@ -23,30 +21,29 @@ import { SidebarArticleCardSkeleton } from "@components/SidebarArticleCard/Sideb
 
 export const ArticlePage: FC = () => {
   const { id }: { id?: string } = useParams();
-  const thunkDispatch = useDispatch<Dispatch>();
   const dispatch = useDispatch();
   const articleItem = useSelector(getCachedArticleItem(Number(id)));
   const relatedArticles = useSelector(getRelatedArticles(Number(id)));
   const sources = useSelector(getSources);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!articleItem?.text);
 
-  React.useEffect(() => {
-    setLoading(true);
-    Promise.all([thunkDispatch(fetchArticleItem(Number(id))), thunkDispatch(fetchRelatedArticles(Number(id)))]).then(
-      () => {
+  React.useLayoutEffect(() => {
+    if (!articleItem?.text) {
+      setLoading(true);
+      Promise.all([dispatch(fetchArticleItem(Number(id))), dispatch(fetchRelatedArticles(Number(id)))]).then(() => {
         setLoading(false);
-      }
-    );
-
-    return () => {
-      dispatch(setArticleItem(null));
-    };
+      });
+    }
   }, [id]);
 
   if (loading) {
     return (
       <section className="article-page">
-        <HeroSkeleton hasText={true} className="article-page__hero" />
+        {articleItem?.title && articleItem?.image ? (
+          <Hero title={articleItem.title} image={articleItem.image} className="article-page__hero" />
+        ) : (
+          <HeroSkeleton hasText={true} className="article-page__hero" />
+        )}
         <div className="container article-page__main">
           <div className="article-page__info">
             <SkeletonText />

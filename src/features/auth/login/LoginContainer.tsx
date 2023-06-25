@@ -4,7 +4,7 @@ import { ProviderId } from "firebase/auth";
 import { LoginForm, TLoginField } from "../components/LoginForm/LoginForm";
 import { Link, Divider, Typography } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/Github";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import LoginIcon from "@mui/icons-material/Login";
 
 import "./LoginContainer.css";

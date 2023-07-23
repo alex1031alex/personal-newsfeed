@@ -19,6 +19,7 @@ import { HeroSkeleton } from "@components/Hero/HeroSkeleton";
 import { ArticleCardSkeleton } from "@components/ArticleCard/ArticleCardSkeleton";
 import { SidebarArticleCardSkeleton } from "@components/SidebarArticleCard/SidebarArticleCardSkeleton";
 import { repeat } from "@app/utils";
+import { useAdaptive } from "@app/hooks";
 
 export const HomePage: FC = () => {
   const dispatch = useDispatch<Dispatch>();
@@ -28,6 +29,7 @@ export const HomePage: FC = () => {
   const categories = useSelector(getCategories);
   const sources = useSelector(getSources);
   const [loading, setLoading] = useState(true);
+  const { isDesktop, isMobile } = useAdaptive();
 
   React.useEffect(() => {
     setLoading(true);
@@ -86,6 +88,7 @@ export const HomePage: FC = () => {
   }
 
   const firstArticle = articles[0];
+  const mainArticles = isMobile ? articles.slice(1) : articles.slice(4);
 
   return (
     <div className="home-page">
@@ -162,7 +165,7 @@ export const HomePage: FC = () => {
       </div>
       <section className="container grid home-page__section">
         <section className="home-page__content">
-          {articles.slice(4).map(({ id, title, date, source_id, image, description }) => {
+          {mainArticles.map(({ id, title, date, source_id, image, description }) => {
             return (
               <ArticleCard
                 id={id}
@@ -177,21 +180,23 @@ export const HomePage: FC = () => {
             );
           })}
         </section>
-        <section className="home-page__sidebar">
-          {articles.slice(1, 4).map(({ id, title, date, source_id, image }) => {
-            return (
-              <SidebarArticleCard
-                id={id}
-                title={title}
-                key={id}
-                date={date}
-                className="home-page__sidebar-item"
-                source={sources[source_id]?.name}
-                image={image}
-              />
-            );
-          })}
-        </section>
+        {isDesktop && (
+          <section className="home-page__sidebar">
+            {articles.slice(1, 4).map(({ id, title, date, source_id, image }) => {
+              return (
+                <SidebarArticleCard
+                  id={id}
+                  title={title}
+                  key={id}
+                  date={date}
+                  className="home-page__sidebar-item"
+                  source={sources[source_id]?.name}
+                  image={image}
+                />
+              );
+            })}
+          </section>
+        )}
       </section>
     </div>
   );

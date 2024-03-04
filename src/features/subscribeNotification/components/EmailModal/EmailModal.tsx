@@ -20,10 +20,13 @@ export const EmailModal: FC<EmailModalProps> = ({ onClose, shown }: EmailModalPr
   return (
     <ModalWrapper shown={shown} onClose={_onClose}>
       <div className="email-modal">
+        <button className="email-modal__close" type="button" onClick={_onClose}>
+          <img src={require("../../../../images/cross-24.svg")} alt="Закрытие модального окна" />
+        </button>
         <h2 className="email-modal__title">
           Хотите получать последние новости от{" "}
           <a className="email-modal__link" href="#">
-            Karpov.Cources?
+            Karpov.Courses?
           </a>
         </h2>
         <p className="email-modal__text">Оставьте свой e-mail и будем на связи!</p>
@@ -45,9 +48,6 @@ export const EmailModal: FC<EmailModalProps> = ({ onClose, shown }: EmailModalPr
             Подписаться
           </Button>
         </form>
-        <button className="email-modal__close" type="button" onClick={_onClose}>
-          <img src={require("../../../../images/cross-24.svg")} alt="Закрытие модального окна" />
-        </button>
       </div>
     </ModalWrapper>
   );

@@ -107,8 +107,10 @@ export const HomePage: FC = () => {
           В тренде
         </Title>
         <div className="grid">
-          {trendArticles.map(({ id, title, category_id, date }) => {
+          {trendArticles.map(({ id, title, category_id, source_id, date }) => {
             const category = categories[category_id];
+            const source = sources.find(({ id }) => source_id === id);
+
             return (
               <ArticleCard
                 id={id}
@@ -116,6 +118,7 @@ export const HomePage: FC = () => {
                 key={id}
                 date={date}
                 category={category?.name}
+                source={source?.name}
                 className="home-page__trends-item"
               />
             );
@@ -166,6 +169,8 @@ export const HomePage: FC = () => {
       <section className="container grid home-page__section">
         <section className="home-page__content">
           {mainArticles.map(({ id, title, date, source_id, image, description }) => {
+            const source = sources.find(({ id }) => source_id === id);
+
             return (
               <ArticleCard
                 id={id}
@@ -173,7 +178,7 @@ export const HomePage: FC = () => {
                 key={id}
                 date={date}
                 className="home-page__article-card"
-                source={sources[source_id]?.name}
+                source={source?.name}
                 description={description}
                 image={image}
               />
@@ -183,6 +188,8 @@ export const HomePage: FC = () => {
         {isDesktop && (
           <section className="home-page__sidebar">
             {articles.slice(1, 4).map(({ id, title, date, source_id, image }) => {
+              const source = sources.find(({ id }) => source_id === id);
+
               return (
                 <SidebarArticleCard
                   id={id}
@@ -190,7 +197,7 @@ export const HomePage: FC = () => {
                   key={id}
                   date={date}
                   className="home-page__sidebar-item"
-                  source={sources[source_id]?.name}
+                  source={source?.name || ""}
                   image={image}
                 />
               );

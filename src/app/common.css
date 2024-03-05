@@ -2,10 +2,12 @@
 
 :root {
   --constant-black-alpha64: rgba(0, 0, 0, 0.64);
+  --constant-black-alpha4: rgba(0, 0, 0, 0.04);
   --constant-white-alpha12: rgba(255, 255, 255, 0.12);
   --constant-white-alpha64: rgba(255, 255, 255, 0.64);
   --constant-black: #262a2f;
   --constant-accent: #0083fc;
+  --constant-grey0: #f2f2f2;
   --constant-grey1: #ebebeb;
   --constant-grey2: #a3a3a3;
   --constant-white: #fff;

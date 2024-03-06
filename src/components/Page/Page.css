@@ -1,22 +1,3 @@
-.header {
-  background: var(--background-primary);
-}
-
-.header__container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  height: 76px;
-}
-
-.header__navigation {
-  margin-left: 24px;
-}
-
-.header__controls {
-  margin-left: auto;
-}
-
 .footer {
   margin-top: 16px;
   padding-top: 16px;

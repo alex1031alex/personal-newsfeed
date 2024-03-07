@@ -17,7 +17,9 @@ export const useAdaptive = (): { isMobile: boolean; isDesktop: boolean } => {
   useEffect(() => {
     window.addEventListener("resize", handleResize);
 
-    return window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return {

@@ -4,10 +4,10 @@ import "./Page.css";
 import { Navigation } from "../Navigation/Navigation";
 import { Logo } from "../Logo/Logo";
 import { EmailModal } from "@features/subscribeNotification/components/EmailModal/EmailModal";
-import { ColorSchemeSwitcher } from "@features/colorScheme/components/ColorSchemeSwitcher/ColorSchemeSwitcher";
 import { Dispatch } from "@app/store";
 import { fetchCategories } from "@features/categories/actions";
 import { fetchSources } from "@features/sources/actions";
+import { Header } from "@components/Header/Header";
 
 const LS_EMAIL_SHOWN_KEY = "newsfeed:email_modal_shown";
 
@@ -33,15 +33,7 @@ export const Page: FC<TProps> = ({ children }) => {
           setEmailModalShown(false);
         }}
       />
-      <header className="header">
-        <div className="container header__container">
-          <Logo />
-          <Navigation className="header__navigation" />
-          <div className="header__controls">
-            <ColorSchemeSwitcher />
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main>{children}</main>
 

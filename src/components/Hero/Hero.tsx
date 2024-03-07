@@ -16,7 +16,7 @@ export const Hero: FC<HeroProps> = ({ image, title, text, className }) => {
   return (
     <section className={classNames("hero", { "hero--no-image": !hasImage }, className)}>
       <div className="hero__in">
-        <Image src={image} className="hero__image" />
+        {<Image src={image} className="hero__image" />}
         <div className="hero__container container">
           <div className="hero__content">
             <Title Component="h1" className="hero__title">

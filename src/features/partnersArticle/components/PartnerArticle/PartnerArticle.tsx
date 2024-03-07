@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import "./PartnerArticle.css";
-import { getMainPartnerArticle } from "../../../../app/api";
+import { getMainPartnerArticle } from "@app/api";
 import { IPartnerArticle } from "../../types";
 
 export const PartnerArticle: FC = () => {
@@ -19,7 +19,7 @@ export const PartnerArticle: FC = () => {
 
   return (
     <section className="partner-article">
-      <div className="container grid">
+      <div className="partner-article__container container grid">
         <div className="partner-article__image-container">
           <img className="partner-article__image" src={article.image} alt={article.title} />
         </div>
